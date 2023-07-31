@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 106891129652157885}
   - component: {fileID: 6701994661497297081}
   - component: {fileID: 1453603186899954801}
-  m_Layer: 0
+  - component: {fileID: 3210244551092113021}
+  - component: {fileID: 4770521326806771563}
+  m_Layer: 6
   m_Name: TreeStruct
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4844,6 +4846,43 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &3210244551092113021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3796573365814924150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cacb428dbf37b54948da031fe8b8dbad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactableId: tree
+  interactable: 1
+--- !u!136 &4770521326806771563
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3796573365814924150}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Height: 4
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &5207887146840713566
 GameObject:
   m_ObjectHideFlags: 0

@@ -35,6 +35,7 @@ public class StructureUpgradeMenuController : MonoBehaviour
     public RectTransform resources;
     private List<ButtonLayout> resourceButtons = new List<ButtonLayout>();
     public Button chooseResourceButton;
+    public TallyCounter chooseResourceCounter;
 
     public FarmBase.StructureInstance structure;
 
@@ -199,6 +200,19 @@ public class StructureUpgradeMenuController : MonoBehaviour
             Destroy(button.gameObject);
         }
 
+        if (FixedVariables.multipleQueue[selectionId]){
+            chooseResourceCounter.gameObject.SetActive(true);
+            chooseResourceButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(120, 0, 0);
+            chooseResourceButton.interactable = false;
+            chooseResourceCounter.Setup(0);
+            chooseResourceCounter.toggleButtons(false);
+        }
+        else{
+            chooseResourceCounter.gameObject.SetActive(false);
+            chooseResourceButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+            chooseResourceButton.interactable = false;
+        }
+
         resourceButtons = new List<ButtonLayout>();
 
         if (FixedVariables.complexResources[selectionId]){
@@ -266,31 +280,57 @@ public class StructureUpgradeMenuController : MonoBehaviour
     private void judgeIfProceedResource(string resourceId){
 
          bool upgradable = true;
+         
+         int max = 0;
+
+         if (structure.structurePropreties.ContainsKey("quantity")){
+            max = FixedVariables.harvestCount[string.Format("{0}:quantity{1}", structure.structureId, structure.structurePropreties["quantity"])];
+         }
 
         foreach (Item item in FixedVariables.resourceCost[resourceId]){
 
             upgradable &= GameManager.Instance.itemInventory.getItemCount(item.itemId) >= item.itemCount;
+            int count = GameManager.Instance.itemInventory.getItemCount(item.itemId) / item.itemCount;
+            if (count < max) max = count;
         }
 
         if (upgradable){
 
+            if (chooseResourceCounter.gameObject.activeSelf){
+                chooseResourceCounter.toggleButtons(true);
+                chooseResourceCounter.Setup(max);
+            }
             chooseResourceButton.interactable = true;
             chooseResourceButton.onClick.RemoveAllListeners();
             chooseResourceButton.onClick.AddListener(delegate {executeResource(resourceId);});
         }
         else{
 
+            if (chooseResourceCounter.gameObject.activeSelf){
+                chooseResourceCounter.toggleButtons(false);
+                chooseResourceCounter.Setup(0);
+            }
             chooseResourceButton.interactable = false;
         }
     }
 
     private void executeResource(string resourceId){
 
-        foreach (Item item in FixedVariables.resourceCost[resourceId]){
+        Item finalItem = null;
 
-            if (item.itemId.Equals("money"))
-             structure.structurePropreties["moneySpent"] = (int)structure.structurePropreties["moneySpent"] + item.itemCount;
-            GameManager.Instance.itemInventory.removeItem(item);
+        foreach (Item item in FixedVariables.resourceCost[resourceId]){
+            
+            if (chooseResourceCounter.gameObject.activeSelf){
+                finalItem = item.clone();
+                finalItem.itemCount *= chooseResourceCounter.count;
+            }
+            else{
+                finalItem = item;
+            }
+
+            if (finalItem.itemId.Equals("money"))
+             structure.structurePropreties["moneySpent"] = (int)structure.structurePropreties["moneySpent"] + finalItem.itemCount;
+            GameManager.Instance.itemInventory.removeItem(finalItem);
         }
 
         if (resourceId.Split(":")[1] == "empty"){
@@ -299,16 +339,37 @@ public class StructureUpgradeMenuController : MonoBehaviour
         else{
             structure.structurePropreties["resource"] = resourceId;
         }
-        structure.structurePropreties["age"] = 0f;
-        structure.structurePropreties["stage"] = 0;
-        if ((string)structure.structurePropreties["currentInteraction"] == "harvestPlant"){
-            structure.structurePropreties["currentInteraction"] = null;
-        }
         
         switch (structure.structureId){
+            
+            case "furnace" :
+
+                structure.structurePropreties["age"] = 0f;
+                structure.structurePropreties["resource"] = resourceId;
+                structure.structurePropreties["count"] = chooseResourceCounter.count;
+                Farm.Instance.getStructureRenderer(structure).GetComponent<Interactable>().interactable = false;
+                Farm.Instance.getStructureRenderer(structure).GetComponent<FurnaceRenderer>().deepUpdateStructure();
+                
+            break;
+
+            case "flowerbed" :
+
+                structure.structurePropreties["age"] = 0f;
+                structure.structurePropreties["stage"] = 0;
+                if ((string)structure.structurePropreties["currentInteraction"] == "harvestPlant"){
+                    structure.structurePropreties["currentInteraction"] = null;
+                }
+                Farm.Instance.getStructureRenderer(structure).GetComponent<FlowerBedRenderer>().deepUpdateStructure();
+
+            break;
 
             case "farmland" :
 
+                structure.structurePropreties["age"] = 0f;
+                structure.structurePropreties["stage"] = 0;
+                if ((string)structure.structurePropreties["currentInteraction"] == "harvestPlant"){
+                    structure.structurePropreties["currentInteraction"] = null;
+                }
                 Farm.Instance.getStructureRenderer(structure).GetComponent<FarmlandRenderer>().deepUpdateStructure();
 
             break;
@@ -373,16 +434,30 @@ public class StructureUpgradeMenuController : MonoBehaviour
         if ((string)structure.structurePropreties["currentInteraction"] == "harvestPlant"){
             structure.structurePropreties["currentInteraction"] = null;
         }
-        structure.structurePropreties["age"] = 0f;
-        structure.structurePropreties["stage"] = 0;
         
         structure.structurePropreties["maintenenceTime"] = (float)FixedVariables.upgradeTimes[upgradeId];
         structure.structurePropreties["currentlyUpgrading"] = upgradeId.Split(":")[2];
         
         switch (structure.structureId){
 
+            case "furnace" :
+
+                Farm.Instance.getStructureRenderer(structure).GetComponent<FurnaceRenderer>().deepUpdateStructure();
+
+                break;
+
+            case "flowerbed" :
+
+                structure.structurePropreties["age"] = 0f;
+                structure.structurePropreties["stage"] = 0;
+                Farm.Instance.getStructureRenderer(structure).GetComponent<FlowerBedRenderer>().deepUpdateStructure();
+
+            break;
+
             case "farmland" :
 
+                structure.structurePropreties["age"] = 0f;
+                structure.structurePropreties["stage"] = 0;
                 Farm.Instance.getStructureRenderer(structure).GetComponent<FarmlandRenderer>().deepUpdateStructure();
 
             break;
@@ -466,7 +541,7 @@ public class StructureUpgradeMenuController : MonoBehaviour
 
     private void setStructureInfo(){
 
-        structureName.text = FarmBase.structureNames[structure.structureId];
+        structureName.text = FixedVariables.structureNames[structure.structureId];
         structureIcon.sprite = GameManager.Instance.getSprite(string.Format("sprites:structureIcon:{0}", structure.structureId));
     }
 }

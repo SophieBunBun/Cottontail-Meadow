@@ -19,6 +19,23 @@ public class GameManager : MonoBehaviour
         {"farmland:strawberry", false},
         {"farmland:pumpkin", false},
 
+        {"flowerbed:empty", true},
+        {"flowerbed:pinkhydra", true},
+        {"flowerbed:bluehydra", true},
+        {"flowerbed:pinkorchid", true},
+        {"flowerbed:blueorchid", true},
+        {"flowerbed:whiteorchid", true},
+        {"flowerbed:orangeorchid", true},
+
+        {"furnace:copper", true},
+        {"furnace:iron", true},
+        {"furnace:brick", true},
+        {"furnace:gold", true},
+        {"furnace:tungsten", true},
+        {"furnace:glass", true},
+        {"furnace:titanium", true},
+        {"furnace:niobium", true},
+
         {"tile:tile:grass", true},
         {"tile:path:dirt", true},
         {"tile:path:brick", true},
@@ -35,6 +52,9 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         itemInventory.addItem(new Item("money", 1000000));
+        itemInventory.addItem(new Item("copperOre", 500));
+        itemInventory.addItem(new Item("ironOre", 6));
+        itemInventory.addItem(new Item("coal", 5));
         Instance = this;
         loadResources("farmAssets");
     }
@@ -48,6 +68,7 @@ public class GameManager : MonoBehaviour
     //Input & state management
 
     public string state = "farmRoaming";
+    public string tool = "inspect";
     void Update(){
 
         switch (state){
@@ -66,6 +87,14 @@ public class GameManager : MonoBehaviour
 
                 playerMovement.stopCharacter();
                 if(Input.GetAxis("Mouse ScrollWheel") != 0){ cameraController.updateZoom(); }
+
+            break;
+
+            case "destroyMode":
+
+                playerMovement.stopCharacter();
+                if(!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()
+                && Input.GetButton("Tap")){ uiController.buildMenu.askForDestruction(Interact.getStructure(cameraController.raycast())); }
 
             break;
 
@@ -108,6 +137,12 @@ public class GameManager : MonoBehaviour
                 uiController.buildPlanMode();
 
             break;
+
+            case "destroyMode":
+
+                uiController.buildPlanMode();
+
+            break;
         }
 
         this.state = state;
@@ -126,21 +161,59 @@ public class GameManager : MonoBehaviour
                 new string[] {"Prefabs/General/ColoredPlane", "general:tools:plane"},
                 new string[] {"Prefabs/General/ItemPickupIcon", "general:tools:itemPickup"},
 
+                new string[] {"Prefabs/General/UI/Button", "general:ui:basicbutton"},
                 new string[] {"Prefabs/General/UI/upgradeButton", "general:ui:upgradeButton"},
                 new string[] {"Prefabs/General/UI/itemDisplay", "general:ui:itemDisplay"},
+                new string[] {"Prefabs/General/UI/itemDisplayButton", "general:ui:itemDisplayButton"},
                 new string[] {"Prefabs/General/UI/resourceSelectionButton", "general:ui:resourceSelectionButton"},
+                new string[] {"Prefabs/General/UI/resourceSelectionButtonComplex", "general:ui:resourceSelectionButtonComplex"},
 
                 new string[] {"Textures/Sprites/ResourceIcons/emptyIcon", "sprites:resourceIcon:empty"},
                 new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:carrot"},
                 new string[] {"Textures/Sprites/ResourceIcons/potatoCropIcon", "sprites:resourceIcon:potato"},
                 new string[] {"Textures/Sprites/ResourceIcons/tomatoCropIcon", "sprites:resourceIcon:tomato"},
+                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:honey"},
+                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:hydrahoney"},
+                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:orchidhoney"},
+                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:pinkhydra"},
+                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:bluehydra"},
+                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:pinkorchid"},
+                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:blueorchid"},
+                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:whiteorchid"},
+                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:orangeorchid"},
+                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:copper"},
+                new string[] {"Textures/Sprites/ResourceIcons/potatoCropIcon", "sprites:resourceIcon:iron"},
+                new string[] {"Textures/Sprites/ResourceIcons/tomatoCropIcon", "sprites:resourceIcon:brick"},
+                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:wood"},
 
                 new string[] {"Textures/Sprites/StructureIcons/farmland", "sprites:structureIcon:farmland"},
+                new string[] {"Textures/Sprites/StructureIcons/farmland", "sprites:structureIcon:flowerbed"},
+                new string[] {"Textures/Sprites/StructureIcons/farmland", "sprites:structureIcon:furnace"},
 
                 new string[] {"Textures/Sprites/ItemIcons/moneyItem", "sprites:itemIcon:money"},
                 new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:carrot"},
                 new string[] {"Textures/Sprites/ItemIcons/potatoItem", "sprites:itemIcon:potato"},
                 new string[] {"Textures/Sprites/ItemIcons/tomatoItem", "sprites:itemIcon:tomato"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:honey"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:hydrahoney"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:orchidhoney"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:pinkhydra"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:bluehydra"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:pinkorchid"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:blueorchid"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:whiteorchid"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:orangeorchid"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:coal"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:copperOre"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:copper"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:ironOre"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:iron"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:clay"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:brick"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:wood"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:oakSappling"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:pineSappling"},
+                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:cherrySappling"},
 
                 new string[] {"Textures/Sprites/InteractionIcons/defaultInteraction", "sprites:interactionIcon:default"},
                 new string[] {"Textures/Sprites/InteractionIcons/maintnenceComplete", "sprites:interactionIcon:maintnenceComplete"},
@@ -167,6 +240,24 @@ public class GameManager : MonoBehaviour
                 new string[] {"Prefabs/Farm/Farmland/Carrot", "structures:farmland:carrot"},
                 new string[] {"Prefabs/Farm/Farmland/Potato", "structures:farmland:potato"},
                 new string[] {"Prefabs/Farm/Farmland/Tomato", "structures:farmland:tomato"},
+
+                //Flowerbed
+                new string[] {"Prefabs/Farm/Structures/Flowerbed/flowerBedStruct", "structures:structures:flowerbed"},
+                new string[] {"Prefabs/Farm/Structures/Flowerbed/flowerBed", "structures:flowerbed:flowerbed1"},
+                new string[] {"Prefabs/Farm/Structures/Flowerbed/flowerBedConstruction", "structures:flowerbed:flowerbed0"},
+                new string[] {"Prefabs/Farm/Structures/Flowerbed/flowerBedFence", "structures:flowerbed:fence"},
+                new string[] {"Prefabs/Farm/Structures/Flowerbed/Tomato", "structures:flowerbed:pinkhydra"},
+                new string[] {"Prefabs/Farm/Structures/Flowerbed/Tomato", "structures:flowerbed:bluehydra"},
+                new string[] {"Prefabs/Farm/Structures/Flowerbed/Tomato", "structures:flowerbed:pinkorchid"},
+                new string[] {"Prefabs/Farm/Structures/Flowerbed/Tomato", "structures:flowerbed:blueorchid"},
+                new string[] {"Prefabs/Farm/Structures/Flowerbed/Tomato", "structures:flowerbed:orangeorchid"},
+                new string[] {"Prefabs/Farm/Structures/Flowerbed/Tomato", "structures:flowerbed:whiteorchid"},
+
+                //Beehouse
+                new string[] {"Prefabs/Farm/Structures/Beehouse/beehouseStruct", "structures:structures:beehouse"},
+                new string[] {"Models/Farm/Materials/Beehouse/beehouse0Mat", "structures:beehouse:beehouse0"},
+                new string[] {"Models/Farm/Materials/Beehouse/beehouse1Mat", "structures:beehouse:beehouse1"},
+                new string[] {"Models/Farm/Materials/Beehouse/beehouse2Mat", "structures:beehouse:beehouse2"},
 
                 //Furnace
                 new string[] {"Prefabs/Farm/Structures/Furnace/furnaceStruct", "structures:structures:furnace"},

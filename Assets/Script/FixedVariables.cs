@@ -9,6 +9,93 @@ public class FixedVariables : MonoBehaviour
     Mid,
     Low
 }
+
+    //Tool lists
+    public static string[] tools = new string[] {"inspect", "wateringcan", "axe", "pickaxe"};
+    public static Dictionary<string, string[]> toolOptions = new Dictionary<string, string[]>{
+
+        {"inspect", new string[] {"build","move","destroy"}},
+        {"wateringcan", new string[] {}},
+        {"axe", new string[] {}},
+        {"pickaxe", new string[] {}},
+    };
+
+    //Tool use
+    public static Dictionary<string, float> miningTime = new Dictionary<string, float>
+    {
+        {"tree:oak", 5f},
+        {"tree:pine", 5f},
+        {"tree:cherry", 5f},
+    };
+
+    //Items
+    public static Dictionary<string, string> itemNames = new Dictionary<string, string>{
+
+        {"money", "Nibbles"},
+
+        {"carrot", "Carrot"},
+        {"potato", "Potato"},
+        {"tomato", "Tomato"},
+
+        {"pinkhydra", "Pink hydrangea"},
+        {"bluehydra", "Blue hydrangea"},
+        {"pinkorchid", "Pink orchid"},
+        {"blueorchid", "Blue orchid"},
+        {"whiteorchid", "White orchid"},
+        {"orangeorchid", "Orange orchid"},
+
+        {"honey", "Honey"},
+        {"hydrahoney", "Hydrangea honey"},
+        {"orchidhoney", "Orchid honey"},
+
+        {"coal", "Coal"},
+        {"copperOre", "Copper Ore"},
+        {"copper", "Copper Bar"},
+        {"ironOre", "Iron Ore"},
+        {"iron", "Iron Bar"},
+        {"clay", "Clay"},
+        {"brick", "Brick"},
+
+        {"wood", "Wood"},
+        {"oakSappling", "Oak sappling"},
+        {"pineSappling", "Pine sappling"},
+        {"cherrySappling", "Cherry sappling"},
+    };
+
+    public static Dictionary<string, string> itemDescription = new Dictionary<string, string>{
+
+        {"money", "The accepted currency on Cottontail meadows! Can be used for purchases and investments."},
+
+        {"carrot", "A carrot! Very good for your eyesight."},
+        {"potato", "Potatoes are a very good source of energy."},
+        {"tomato", "Some like it in their salads."},
+
+        {"pinkhydra", "TODO"},
+        {"bluehydra", "TODO"},
+        {"pinkorchid", "TODO"},
+        {"blueorchid", "TODO"},
+        {"whiteorchid", "TODO"},
+        {"orangeorchid", "TODO"},
+
+        {"honey", "TODO"},
+        {"hydrahoney", "TODO"},
+        {"orchidhoney", "TODO"},
+
+        {"coal", "A very energetic source of power."},
+        {"copperOre", "Unrefined copper, smelt it to make a bar."},
+        {"copper", "Smelted copper, a very good conductive material."},
+        {"ironOre", "Unrefined iron, smelt it to make a bar."},
+        {"iron", "Smelted iron, a relatively common and strong material."},
+        {"clay", "Maleable clay that can be used for many purposes."},
+        {"brick", "Hardened clay that is mainly used for construction."},
+
+        {"wood", "TODO"},
+        {"oakSappling", "TODO"},
+        {"pineSappling", "TODO"},
+        {"cherrySappling", "TODO"},
+    };
+
+
     //Tile interactions
     public static Dictionary<string, Dictionary<string, TileLinkRelation>> tileLinkRelationship =
      new Dictionary<string, Dictionary<string, TileLinkRelation>>{
@@ -42,10 +129,24 @@ public class FixedVariables : MonoBehaviour
         {"path:water", new List<string>{"path:water"}},
      };
 
+     public static Dictionary<string, List<string>> tileRestrictions = new Dictionary<string, List<string>>{
+        
+        {"farmland", new List<string>{"tile:grass", "path:dirt"}},
+        {"flowerbed", new List<string>{"tile:grass", "path:dirt"}},
+     };
+
     public static Dictionary<string, string> interactionIcons = new Dictionary<string, string>{
 
         {"farmland:finishUpgrade", "sprites:interactionIcon:maintnenceComplete"},
         {"farmland:harvestPlant", "sprites:interactionIcon:farmlandCropReady"},
+
+        {"flowerbed:finishUpgrade", "sprites:interactionIcon:maintnenceComplete"},
+        {"flowerbed:harvestPlant", "sprites:interactionIcon:farmlandCropReady"},
+
+        {"beehouse:harvestResource", "sprites:interactionIcon:farmlandCropReady"},
+
+        {"furnace:finishUpgrade", "sprites:interactionIcon:maintnenceComplete"},
+        {"furnace:harvestResource", "sprites:interactionIcon:farmlandCropReady"},
     };
 
     public static Dictionary<string, string> decorNames = new Dictionary<string, string>{
@@ -130,14 +231,17 @@ public class FixedVariables : MonoBehaviour
     public static Dictionary<string, string> structureNames = new Dictionary<string, string>{
 
         {"farmland", "Farmland"},
+        {"flowerbed", "Flower bed"},
         {"furnace", "Furnace"},
         {"beehouse", "Bee house"},
-        {"flowerbed", "Flower bed"},
     };
 
     public static Dictionary<string, string> structureResourceName = new Dictionary<string, string>{
 
-        {"farmland", "Crop"}
+        {"farmland", "Crop"},
+        {"flowerbed", "Flower"},
+        {"furnace", "Resource"},
+        {"beehouse", "Honey"},
     };
 
     //Production proprieties
@@ -155,19 +259,50 @@ public class FixedVariables : MonoBehaviour
         {"farmland:potato", 0},
         {"farmland:tomato", 1},
 
+        {"flowerbed:pinkhydra", 1},
+        {"flowerbed:bluehydra", 1},
+        {"flowerbed:pinkorchid", 1},
+        {"flowerbed:blueorchid", 1},
+        {"flowerbed:whiteorchid", 1},
+        {"flowerbed:prangeorchid", 1},
+
+        {"beehouse", 2},
+
         {"tree:oak", 2},
+        
+    };
+
+    public static Dictionary<string, int> stageToResetTo = new Dictionary<string, int>
+    {
+        {"farmland:carrot", 0},
+        {"farmland:potato", 0},
+        {"farmland:tomato", 1},
+
+        {"flowerbed:pinkhydra", 1},
+        {"flowerbed:bluehydra", 1},
+        {"flowerbed:pinkorchid", 0},
+        {"flowerbed:blueorchid", 0},
+        {"flowerbed:whiteorchid", 0},
+        {"flowerbed:prangeorchid", 0},
+
+        {"beehouse", 0},
     };
 
     //Build
     public static Dictionary<string, string> structureDescriptions = new Dictionary<string, string>{
 
         {"farmland", "A patch of farmland that can be used to grow vegetables and other crops."},
+        {"flowerbed", "A flower bed to grow your flower on."},
         {"furnace", "A large furnace to smelt your minerals."},
+        {"beehouse", "A bee house full of bees that will produce honey based on the flower near them."}
     };
 
     public static Dictionary<string, Item[]> structureBuildRequirements = new Dictionary<string, Item[]>{
 
         {"farmland", new Item[] {
+            new Item("money", 1000)
+        }},
+        {"flowerbed", new Item[] {
             new Item("money", 1000)
         }},
         {"furnace", new Item[] {
@@ -176,17 +311,14 @@ public class FixedVariables : MonoBehaviour
         {"beehouse", new Item[] {
             new Item("money", 1000)
         }},
-        {"flowerbed", new Item[] {
-            new Item("money", 1000)
-        }},
     };
 
     public static Dictionary<string, bool> isDecor = new Dictionary<string, bool>{
         
         {"farmland", false},
+        {"flowerbed", false},
         {"furnace", false},
         {"beehouse", false},
-        {"flowerbed", false},
 
         {"tree", true},
         {"fruittree", true}
@@ -195,12 +327,12 @@ public class FixedVariables : MonoBehaviour
     public static Dictionary<string, string> structureIcons = new Dictionary<string, string>{
 
         {"farmland", "sprites:upgradeIcon:farmlandCrop"},
+        {"flowerbed", "sprites:upgradeIcon:farmlandCrop"},
         {"furnace", "sprites:upgradeIcon:farmlandCrop"},
         {"beehouse", "sprites:upgradeIcon:farmlandCrop"},
-        {"flowerbed", "sprites:upgradeIcon:farmlandCrop"},
     };
 
-    public static string[] structureBuildList = new string[] {"farmland", "furnace", "beehouse", "flowerbed"};
+    public static string[] structureBuildList = new string[] {"farmland", "flowerbed", "furnace", "beehouse"};
     public static string[] decorBuildList = new string[] {"tile", "tree", "fruittree"};
 
     //UpgradeEffects
@@ -208,7 +340,22 @@ public class FixedVariables : MonoBehaviour
 
         {"farmland:quantity0", 10},
         {"farmland:quantity1", 20},
-        {"farmland:quantity2", 50}
+        {"farmland:quantity2", 50},
+
+        {"flowerbed:quantity0", 5},
+        {"flowerbed:quantity1", 10},
+        {"flowerbed:quantity2", 25},
+
+        {"beehouse", 5},
+
+        {"furnace:quantity0", 2},
+        {"furnace:quantity1", 5},
+        {"furnace:quantity2", 10},
+        {"furnace:quantity3", 20},
+
+        {"tree:oak", 20},
+        {"tree:pine", 20},
+        {"tree:cherry", 20},
     };
 
     public static Dictionary<string, float> harvestSpeed = new Dictionary<string, float>{
@@ -217,6 +364,11 @@ public class FixedVariables : MonoBehaviour
         {"farmland:soilQuality1", 1.5f},
         {"farmland:soilQuality2", 2f},
         {"farmland:soilQuality3", 3f},
+
+        {"flowerbed:soilQuality0", 1f},
+        {"flowerbed:soilQuality1", 1.5f},
+        {"flowerbed:soilQuality2", 2f},
+        {"flowerbed:soilQuality3", 3f},
 
         {"furnace:speed0", 1f},
         {"furnace:speed1", 1.5f},
@@ -228,6 +380,7 @@ public class FixedVariables : MonoBehaviour
     public static Dictionary<string, string> speedUpgradeId = new Dictionary<string, string>{
 
         {"structure:farmland", "soilQuality"},
+        {"structure:flowerbed", "soilQuality"},
         {"structure:furnace", "speed"}
     };
 
@@ -242,6 +395,34 @@ public class FixedVariables : MonoBehaviour
         {"farmland:mushroom", new Item[] {new Item("money", 0)}},
         {"farmland:strawberry", new Item[] {new Item("money", 0)}},
         {"farmland:pumpkin", new Item[] {new Item("money", 0)}},
+
+        {"flowerbed:empty", new Item[] {new Item("money", 0)}},
+        {"flowerbed:pinkhydra", new Item[] {new Item("money", 250)}},
+        {"flowerbed:bluehydra", new Item[] {new Item("money", 250)}},
+        {"flowerbed:pinkorchid", new Item[] {new Item("money", 250)}},
+        {"flowerbed:blueorchid", new Item[] {new Item("money", 250)}},
+        {"flowerbed:whiteorchid", new Item[] {new Item("money", 250)}},
+        {"flowerbed:orangeorchid", new Item[] {new Item("money", 250)}},
+
+        {"furnace:copper", new Item[] {new Item("copperOre", 2), new Item("coal", 1)}},
+        {"furnace:iron", new Item[] {new Item("ironOre", 2), new Item("coal", 1)}},
+        {"furnace:brick", new Item[] {new Item("clay", 5), new Item("coal", 1)}},
+        {"furnace:gold", new Item[] {new Item("goldOre", 2), new Item("coal", 1)}},
+        {"furnace:tungsten", new Item[] {new Item("tungstenOre", 2), new Item("coal", 1)}},
+        {"furnace:glass", new Item[] {new Item("silica", 5), new Item("coal", 1)}},
+        {"furnace:titanium", new Item[] {new Item("titaniumOre", 2), new Item("coal", 1)}},
+        {"furnace:niobium", new Item[] {new Item("niobiumOre", 2), new Item("coal", 1)}},
+    };
+
+    public static Dictionary<string, string> flowerToHoney = new Dictionary<string, string>{
+
+        {"flowerbed:pinkhydra", "hydrahoney"},
+        {"flowerbed:bluehydra", "hydrahoney"},
+        {"flowerbed:pinkorchid", "orchidhoney"},
+        {"flowerbed:blueorchid", "orchidhoney"},
+        {"flowerbed:whiteorchid", "orchidhoney"},
+        {"flowerbed:orangeorchid", "orchidhoney"},
+
     };
 
     public static Dictionary<string, string> resourceDescriptions = new Dictionary<string, string>{
@@ -256,9 +437,17 @@ public class FixedVariables : MonoBehaviour
         {"farmland:strawberry", "TODO"},
         {"farmland:pumpkin", "TODO"},    
 
+        {"flowerbed:empty", "Clear the flower bed of any flowers."},
+        {"flowerbed:pinkhydra", "TODO"},
+        {"flowerbed:bluehydra", "TODO"},
+        {"flowerbed:pinkorchid", "TODO"},
+        {"flowerbed:blueorchid", "TODO"},
+        {"flowerbed:whiteorchid", "TODO"},
+        {"flowerbed:orangeorchid", "TODO"},
+
         {"furnace:copper", "A bar of copper, a cheap and conductive material."},
         {"furnace:iron", "A bar of iron, a common and strong material."},
-        {"furnace:clay", "Very versatile and common building material."},
+        {"furnace:brick", "Very versatile and common building material."},
         {"furnace:gold", "TODO"},
         {"furnace:tungsten", "TODO"},
         {"furnace:glass", "TODO"},
@@ -277,9 +466,17 @@ public class FixedVariables : MonoBehaviour
         {"farmland:strawberry", "Strawberry"},
         {"farmland:pumpkin", "Pumpkin"},
 
+        {"flowerbed:empty", "Clear"},
+        {"flowerbed:pinkhydra", "Pink hydrangea"},
+        {"flowerbed:bluehydra", "Blue hydrangea"},
+        {"flowerbed:pinkorchid", "Pink orchid"},
+        {"flowerbed:blueorchid", "Blue orchid"},
+        {"flowerbed:whiteorchid", "White orchid"},
+        {"flowerbed:orangeorchid", "Orange orchid"},
+
         {"furnace:copper", "Copper bar"},
         {"furnace:iron", "Iron bar"},
-        {"furnace:clay", "Hardened clay"},
+        {"furnace:brick", "Hardened clay"},
         {"furnace:gold", "Gold bar"},
         {"furnace:tungsten", "Tungsten bar"},
         {"furnace:glass", "Glass"},
@@ -290,6 +487,19 @@ public class FixedVariables : MonoBehaviour
     public static Dictionary<string, bool> complexResources = new Dictionary<string, bool>{
 
         {"structure:farmland:resource", false},
+        {"structure:flowerbed:resource", false},
+        {"structure:furnace:resource", true},
+
+        {"tile", false},
+        {"tree", false},
+        {"fruittree", false},
+
+    };
+
+     public static Dictionary<string, bool> multipleQueue = new Dictionary<string, bool>{
+
+        {"structure:farmland:resource", false},
+        {"structure:flowerbed:resource", false},
         {"structure:furnace:resource", true},
 
     };
@@ -301,9 +511,26 @@ public class FixedVariables : MonoBehaviour
         {"farmland:tomato0", 1500f},
         {"farmland:tomato1", 1000f},
 
+        {"flowerbed:pinkhydra0", 1000f},
+        {"flowerbed:pinkhydra1", 500f},
+        {"flowerbed:bluehydra0", 1000f},
+        {"flowerbed:bluehydra1", 500f},
+        {"flowerbed:pinkorchid0", 400f},
+        {"flowerbed:pinkorchid1", 400f},
+        {"flowerbed:blueorchid0", 400f},
+        {"flowerbed:blueorchid1", 400f},
+        {"flowerbed:whiteorchid0", 400f},
+        {"flowerbed:whiteorchid1", 400f},
+        {"flowerbed:orangeorchid0", 400f},
+        {"flowerbed:orangeorchid1", 400f},
+
+        {"beehouse0", 500f},
+        {"beehouse1", 500f},
+        {"beehouse2", 0f},
+
         {"furnace:copper", 200f},
         {"furnace:iron", 400f},
-        {"furnace:clay", 200f},
+        {"furnace:brick", 200f},
         {"furnace:gold", 600f},
         {"furnace:tungsten", 1000f},
         {"furnace:glass", 600f},
@@ -335,15 +562,25 @@ public class FixedVariables : MonoBehaviour
             "farmland:pumpkin"
         }},
 
+        {"structure:flowerbed:resource0", new string[] {
+            "flowerbed:empty",
+            "flowerbed:pinkhydra",
+            "flowerbed:bluehydra",
+            "flowerbed:pinkorchid",
+            "flowerbed:blueorchid",
+            "flowerbed:whiteorchid",
+            "flowerbed:orangeorchid",
+        }},
+
         {"structure:furnace:resource0", new string[] {
             "furnace:copper",
             "furnace:iron",
-            "furnace:clay",
+            "furnace:brick",
         }},
         {"structure:furnace:resource1", new string[] {
             "furnace:copper",
             "furnace:iron",
-            "furnace:clay",
+            "furnace:brick",
 
             "furnace:gold",
             "furnace:tungsten",
@@ -352,7 +589,7 @@ public class FixedVariables : MonoBehaviour
         {"structure:furnace:resource2", new string[] {
             "furnace:copper",
             "furnace:iron",
-            "furnace:clay",
+            "furnace:brick",
 
             "furnace:gold",
             "furnace:tungsten",
@@ -373,6 +610,16 @@ public class FixedVariables : MonoBehaviour
         {"structure:farmland:soilRetension1", 600},
         {"structure:farmland:soilRetension2", 7200},
         {"structure:farmland:soilRetension3", 43200},
+
+        {"structure:flowerbed:tier0", 600},
+        {"structure:flowerbed:quantity1", 600},
+        {"structure:flowerbed:quantity2", 7200},
+        {"structure:flowerbed:soilQuality1", 600},
+        {"structure:flowerbed:soilQuality2", 7200},
+        {"structure:flowerbed:soilQuality3", 43200},
+        {"structure:flowerbed:soilRetension1", 600},
+        {"structure:flowerbed:soilRetension2", 7200},
+        {"structure:flowerbed:soilRetension3", 43200},
 
         {"structure:furnace:tier0", 600},
         {"structure:furnace:tier1", 2400},
@@ -396,6 +643,16 @@ public class FixedVariables : MonoBehaviour
         {"structure:farmland:soilRetension2", "Increases the soil retension of the farmland, retaining water for longer."},
         {"structure:farmland:soilRetension3", "Increases the soil retension of the farmland, retaining water for longer."},
 
+        {"structure:flowerbed:resource", "Choose a flower you wish to plant on the flower bed."},
+        {"structure:flowerbed:quantity1", "Increases the amount of flowers being grown on the flower bed."},
+        {"structure:flowerbed:quantity2", "Increases the amount of flowers being grown on the flower bed."},
+        {"structure:flowerbed:soilQuality1", "Increases the rate at which flowers are grown on the flower bed."},
+        {"structure:flowerbed:soilQuality2", "Increases the rate at which flowers are grown on the flower bed."},
+        {"structure:flowerbed:soilQuality3", "Increases the rate at which flowers are grown on the flower bed."},
+        {"structure:flowerbed:soilRetension1", "Increases the soil retension of the flower bed, retaining water for longer."},
+        {"structure:flowerbed:soilRetension2", "Increases the soil retension of the flower bed, retaining water for longer."},
+        {"structure:flowerbed:soilRetension3", "Increases the soil retension of the flower bed, retaining water for longer."},
+
         {"structure:furnace:resource", "Choose a resource to cook up and refine."},
         {"structure:furnace:tier1", "Increase the furnace tier, unlocking new refinement possibilities."},
         {"structure:furnace:tier2", "Inscrease the furnace tier, unlocking new refinement possibilities."},
@@ -418,6 +675,16 @@ public class FixedVariables : MonoBehaviour
         {"structure:farmland:soilRetension2", "Soil Retension 2"},
         {"structure:farmland:soilRetension3", "Soil Retension 3"},
 
+        {"structure:flowerbed:resource", "Plant Crop"},
+        {"structure:flowerbed:quantity1", "Quantity 1"},
+        {"structure:flowerbed:quantity2", "Quantity 2"},
+        {"structure:flowerbed:soilQuality1", "Soil Quality 1"},
+        {"structure:flowerbed:soilQuality2", "Soil Quality 2"},
+        {"structure:flowerbed:soilQuality3", "Soil Quality 3"},
+        {"structure:flowerbed:soilRetension1", "Soil Retension 1"},
+        {"structure:flowerbed:soilRetension2", "Soil Retension 2"},
+        {"structure:flowerbed:soilRetension3", "Soil Retension 3"},
+
         {"structure:furnace:resource", "Refine"},
         {"structure:furnace:tier1", "Tier 2"},
         {"structure:furnace:tier2", "Tier 3"},
@@ -439,6 +706,16 @@ public class FixedVariables : MonoBehaviour
         {"structure:farmland:soilRetension1", "sprites:upgradeIcon:farmlandSoilRetension"},
         {"structure:farmland:soilRetension2", "sprites:upgradeIcon:farmlandSoilRetension"},
         {"structure:farmland:soilRetension3", "sprites:upgradeIcon:farmlandSoilRetension"},
+
+        {"structure:flowerbed:resource", "sprites:upgradeIcon:farmlandCrop"},
+        {"structure:flowerbed:quantity1", "sprites:upgradeIcon:farmlandQuantity"},
+        {"structure:flowerbed:quantity2", "sprites:upgradeIcon:farmlandQuantity"},
+        {"structure:flowerbed:soilQuality1", "sprites:upgradeIcon:farmlandSoilQuality"},
+        {"structure:flowerbed:soilQuality2", "sprites:upgradeIcon:farmlandSoilQuality"},
+        {"structure:flowerbed:soilQuality3", "sprites:upgradeIcon:farmlandSoilQuality"},
+        {"structure:flowerbed:soilRetension1", "sprites:upgradeIcon:farmlandSoilRetension"},
+        {"structure:flowerbed:soilRetension2", "sprites:upgradeIcon:farmlandSoilRetension"},
+        {"structure:flowerbed:soilRetension3", "sprites:upgradeIcon:farmlandSoilRetension"},
 
         {"structure:furnace:resource", "sprites:upgradeIcon:farmlandCrop"},
         {"structure:furnace:tier1", "sprites:upgradeIcon:farmlandQuantity"},
@@ -477,6 +754,33 @@ public class FixedVariables : MonoBehaviour
             new Item("money", 250000)
         }},
 
+
+        {"structure:flowerbed:quantity1", new Item[] {
+            new Item("money", 1000)
+        }},
+        {"structure:flowerbed:quantity2", new Item[] {
+            new Item("money", 50000)
+        }},
+        {"structure:flowerbed:soilQuality1", new Item[] {
+            new Item("money", 500)
+        }},
+        {"structure:flowerbed:soilQuality2", new Item[] {
+            new Item("money", 10000)
+        }},
+        {"structure:flowerbed:soilQuality3", new Item[] {
+            new Item("money", 500000)
+        }},
+        {"structure:flowerbed:soilRetension1", new Item[] {
+            new Item("money", 250)
+        }},
+        {"structure:flowerbed:soilRetension2", new Item[] {
+            new Item("money", 5000)
+        }},
+        {"structure:flowerbed:soilRetension3", new Item[] {
+            new Item("money", 250000)
+        }},
+
+
         {"structure:furnace:tier1", new Item[] {
             new Item("money", 1000)
         }},
@@ -508,6 +812,10 @@ public class FixedVariables : MonoBehaviour
         {"structure:farmland:soilQuality", 3},
         {"structure:farmland:soilRetension", 3},
 
+        {"structure:flowerbed:quantity", 2},
+        {"structure:flowerbed:soilQuality", 3},
+        {"structure:flowerbed:soilRetension", 3},
+
         {"structure:furnace:tier", 2},
         {"structure:furnace:quantity", 3},
         {"structure:furnace:speed", 3},
@@ -515,6 +823,7 @@ public class FixedVariables : MonoBehaviour
     public static Dictionary<string, string[]> upgradeCategories = new Dictionary<string, string[]>{
 
         {"structure:farmland", new string[] {"resource","quantity","soilQuality","soilRetension"}},
+        {"structure:flowerbed", new string[] {"resource","quantity","soilQuality","soilRetension"}},
         {"structure:furnace", new string[] {"resource","tier","quantity","speed"}},
     };
 }

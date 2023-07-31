@@ -47,7 +47,7 @@ public class FarmlandRenderer : MonoBehaviour
         }
 
         if (fence == null){
-            Instantiate((GameObject)GameManager.Instance.getResource("structures:farmland:fence"), transform);
+            fence = Instantiate((GameObject)GameManager.Instance.getResource("structures:farmland:fence"), transform);
         }
 
         if (interactionAnouncement != null){
@@ -62,7 +62,7 @@ public class FarmlandRenderer : MonoBehaviour
         }
 
         //Initiating farmland
-        if ((string)farmStructure.structurePropreties["currentlyUpgrading"] == "tierUpgrade")
+        if ((string)farmStructure.structurePropreties["currentlyUpgrading"] == "tier0")
         {
             farmLand = Instantiate((GameObject)GameManager.Instance.getResource("structures:farmland:farmland0"), transform);
         }
@@ -161,6 +161,34 @@ public class FarmlandRenderer : MonoBehaviour
         }
     }
 
+    public void destroyStructure(){
+        Destroy(maintnenceSign);
+        Destroy(statisticsSign);
+        Destroy(farmLand);
+        Destroy(fence);
+        if (interactionAnouncement != null){
+
+            foreach (Transform child in interactionAnouncement.transform){
+                foreach (Transform leafChild in child){
+                    Destroy(leafChild.gameObject);
+                }
+                Destroy(child.gameObject);
+            }
+            Destroy(interactionAnouncement);
+        }
+        if (nodes != null){
+            foreach (Transform child in nodes.transform){
+                foreach (Transform leafChild in child){
+                    Destroy(leafChild.gameObject);
+                }
+                Destroy(child.gameObject);
+            }
+            Destroy(nodes);
+        }
+
+        Destroy(this.gameObject);
+    }
+
     public void anounceInteraction(){
 
         interactionAnouncement = Instantiate((GameObject)GameManager.Instance.getResource("general:tools:empty"), transform);
@@ -176,12 +204,5 @@ public class FarmlandRenderer : MonoBehaviour
         collectIcon.transform.localPosition = new Vector3(0f, 0f, 0f);
         collectIcon.GetComponent<ItemPickupAnim>().spriteRenderer.sprite =
             GameManager.Instance.getSprite("sprites:itemIcon:" + ((string)farmStructure.structurePropreties["resource"]).Split(":")[1]);
-        
-        int harvestAmount = (int)Mathf.Round(FixedVariables.harvestCount["farmland:quantity" + farmStructure.structurePropreties["quantity"]]
-                            * (((float)farmStructure.structurePropreties["hydration"] / 2f) + 0.5f));
-        Item harvested = new Item(((string)farmStructure.structurePropreties["resource"]).Split(":")[1], harvestAmount);
-
-        ((Inventory)farmStructure.structurePropreties["harvested"]).addItem(harvested);
-        GameManager.Instance.itemInventory.addItem(harvested);
     }
 }

@@ -214,6 +214,43 @@ public class StructureBuildMenuController : MonoBehaviour
         StartCoroutine(OpenUI());
     }
 
+    public void openForDestroy(){
+        
+        GameManager.Instance.changeState("destroyMode");
+        StartCoroutine(UIController.Instance.buildPlanHUD.OpenElement(true));
+        UIController.Instance.buildPlanHUD.goBack.onClick.RemoveAllListeners();
+        UIController.Instance.buildPlanHUD.goBack.onClick.AddListener(delegate {exitDestroyMode();});
+    }
+
+    public void exitDestroyMode(){
+
+        GameManager.Instance.changeState("farmRoaming");
+        StartCoroutine(UIController.Instance.buildPlanHUD.CloseElement());
+    }
+
+    public void askForDestruction(FarmBase.StructureInstance structure){
+
+        if (structure != null){
+
+            StartCoroutine(UIController.Instance.buildPlanHUD.CloseElement());
+            UIController.Instance.textPrompt.ToggleElement(true);
+            UIController.Instance.textPrompt.promptText.text = "Do you really want to destroy this building?";
+            UIController.Instance.textPrompt.cancelButton.onClick.RemoveAllListeners();
+            UIController.Instance.textPrompt.cancelButton.onClick.AddListener(delegate {
+                UIController.Instance.textPrompt.ToggleElement(false);
+                StartCoroutine(UIController.Instance.buildPlanHUD.OpenElement(true));});
+            UIController.Instance.textPrompt.confirmButton.onClick.RemoveAllListeners();
+            UIController.Instance.textPrompt.confirmButton.onClick.AddListener(delegate {
+                UIController.Instance.textPrompt.ToggleElement(false);
+                Farm.Instance.destroyStructure(structure);
+                GameManager.Instance.changeState("farmRoaming");});
+        }
+    }
+
+    public void openForMove(){
+
+    }
+
     private void createBuildButtons(){
 
         foreach (Transform child in content){
@@ -272,7 +309,7 @@ public class StructureBuildMenuController : MonoBehaviour
 
                 ButtonLayout decorButton = null;
 
-                if (FixedVariables.complexResources[decor]){
+                if (FixedVariables.complexResources[decorId]){
 
                     decorButton = Instantiate(
                     (GameObject)GameManager.Instance.getResource("general:ui:resourceSelectionButtonComplex"), decorItems).GetComponent<ButtonLayout>();
@@ -305,7 +342,7 @@ public class StructureBuildMenuController : MonoBehaviour
                 }
                 
                 decorButton.text.text = FixedVariables.decorNames[decor];
-                decorButton.icon.sprite = GameManager.Instance.getSprite("sprites:resourceIcon:" + decor.Split(":")[1]);
+                //decorButton.icon.sprite = GameManager.Instance.getSprite("sprites:resourceIcon:" + decor.Split(":")[1]);
                 decorButton.button.onClick.AddListener(delegate {setDecorButton(decorButton); setDecorSelection(decor);});
 
                 decorButtons.Add(decorButton);
@@ -355,7 +392,7 @@ public class StructureBuildMenuController : MonoBehaviour
 
     private void setDecorInfo(string decorId){
 
-        decorIcon.sprite = GameManager.Instance.getSprite(FixedVariables.decorIcons[decorId]);
+        //decorIcon.sprite = GameManager.Instance.getSprite(FixedVariables.decorIcons[decorId]);
         decorName.text = FixedVariables.decorNames[decorId];
         decorDescription.text = FixedVariables.decorDescriptions[decorId];
     }

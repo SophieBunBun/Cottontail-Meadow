@@ -1,29 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
     public static UIController Instance;
 
     [Header("UI elements")]
+    public InventoryMenuController inventoryMenu;
     public StructureUpgradeMenuController upgradeMenu;
     public StructureBuildMenuController buildMenu;
     public StructureStatPanelController statsPanel;
 
     [Header("Hud elements")]
     public MoneyDisplayHUD moneyDisplayHUD;
-    public BuildStructureButtonHUD buildStructureButtonHUD;
+    public CanvasGroup toolHud;
+    public Button openInventoryButtonHUD;
     public BuildPlanHUD buildPlanHUD;
+    public TextPrompt textPrompt;
+    public InteractionProgressBar interactBar;
 
     void Awake()
     {
         Instance = this;
+        openInventoryButtonHUD.onClick.AddListener(delegate {openInventory();});
     }
 
     public void OpenBuildMenu(){
 
         buildMenu.openForBuild();
+    }
+
+    public void OpenDestroyMenu(){
+
+        buildMenu.openForDestroy();
+    }
+
+    public void openInventory(){
+
+        inventoryMenu.openInventory();
     }
 
     private void enableCanvasGroup(CanvasGroup cv){
@@ -50,18 +66,21 @@ public class UIController : MonoBehaviour
     public void farmPromptMode(){
 
         enableCanvasGroup(moneyDisplayHUD.GetComponent<CanvasGroup>());
-        fadeCanvasGroup(buildStructureButtonHUD.GetComponent<CanvasGroup>());
+        fadeCanvasGroup(toolHud);
+        fadeCanvasGroup(openInventoryButtonHUD.GetComponent<CanvasGroup>());
     }
 
     public void farmRoamingMode(){
 
         enableCanvasGroup(moneyDisplayHUD.GetComponent<CanvasGroup>());
-        enableCanvasGroup(buildStructureButtonHUD.GetComponent<CanvasGroup>());
+        enableCanvasGroup(toolHud);
+        enableCanvasGroup(openInventoryButtonHUD.GetComponent<CanvasGroup>());
     }
 
     public void buildPlanMode(){
 
         hideCanvasGroup(moneyDisplayHUD.GetComponent<CanvasGroup>());
-        hideCanvasGroup(buildStructureButtonHUD.GetComponent<CanvasGroup>());
+        hideCanvasGroup(toolHud);
+        hideCanvasGroup(openInventoryButtonHUD.GetComponent<CanvasGroup>());
     }
 }

@@ -88,13 +88,15 @@ public class StructureStatPanelController : MonoBehaviour
 
         while (true){
 
-            int currentStage = (int)structure.structurePropreties["stage"];
+            int currentStage = structure.structurePropreties.ContainsKey("stage") ? (int)structure.structurePropreties["stage"] : 0;
 
-            while(currentStage == (int)structure.structurePropreties["stage"]){
+            while(!structure.structurePropreties.ContainsKey("stage") || currentStage == (int)structure.structurePropreties["stage"]){
 
                 float age = (float)structure.structurePropreties["age"];
-                float maxAge = FixedVariables.resourceProductionTimes[string.Format("{0}{1}",
-                structure.structurePropreties["resource"],structure.structurePropreties["stage"])];
+                float maxAge = FixedVariables.proccessTimes[string.Format("{0}{1}",
+                structure.structurePropreties["resource"],
+                structure.structurePropreties.ContainsKey("stage") ? structure.structurePropreties["stage"] : "")];
+                if (structure.structurePropreties.ContainsKey("count")) maxAge *= (int)structure.structurePropreties["count"];
                 string speedUpgradeId = FixedVariables.speedUpgradeId[string.Format("structure:{0}",structure.structureId)];
 
                 timeBar.setPercentage(age / maxAge);
@@ -112,15 +114,16 @@ public class StructureStatPanelController : MonoBehaviour
     private void setTimeStats(){
 
         if (structure.structurePropreties["currentlyUpgrading"] == null){
+
             if (structure.structurePropreties["resource"] != null){
-                if (FixedVariables.resourceFinalStage[(string)structure.structurePropreties["resource"]] == (int)structure.structurePropreties["stage"]){
+                if (!structure.structurePropreties.ContainsKey("stage") || FixedVariables.resourceFinalStage[(string)structure.structurePropreties["resource"]] == (int)structure.structurePropreties["stage"]){
                     timeLabel.text = "Time until next harvest:";}
                 else{ timeLabel.text = "Time until next stage:";}
                 timeBar.setColor(new Color(0.67f, 0.88f, 0.42f));
                 updater = StartCoroutine(updateCycleHarvest());
             }
             else{
-                timeLabel.text = "No crops planted";
+                timeLabel.text = "No resource set.";
                 timeBar.setColor(new Color(0.67f, 0.88f, 0.42f));
                 timeBar.setPercentage(0f);
                 timeText.text = "-";

@@ -6,7 +6,8 @@ public class FarmBase : MonoBehaviour
 {
     public static Dictionary<string, string> structureNames = new Dictionary<string, string>{
 
-        {"farmland", "Farmland"}
+        {"farmland", "Farmland"},
+        {"furnace", "Furnace"},
     };
 
     public static Dictionary<string, float> growthTimes = new Dictionary<string, float>
@@ -30,7 +31,7 @@ public class FarmBase : MonoBehaviour
     public static Dictionary<string, int[]> structureSize = new Dictionary<string, int[]>
     {
         {"smallHouse1", new int[] {3,3}},
-        {"furnace",  new int[]  {3,3}},
+        {"furnace",  new int[]  {3,2}},
         {"farmland",  new int[]  {4,4}},
         {"beehouse",  new int[]  {1,1}},
         {"flowerbed",  new int[]  {2,2}},
@@ -53,7 +54,7 @@ public class FarmBase : MonoBehaviour
                     {"stage", 0},
                     {"hydration", 1f},
 
-                    {"currentlyUpgrading", "baseBuild"},
+                    {"currentlyUpgrading", "tier0"},
                     {"currentInteraction", null},
 
                     {"maintenenceTime", (float)FixedVariables.upgradeTimes["structure:farmland:baseBuild"]},
@@ -98,7 +99,7 @@ public class FarmBase : MonoBehaviour
                     {"resource", null},
                     {"age", 0f},
 
-                    {"currentlyUpgrading", "tierUpgrade"},
+                    {"currentlyUpgrading", "tier0"},
                     {"currentInteraction", null},
 
                     {"maintenenceTime", (float)FixedVariables.upgradeTimes["structure:furnace:tier0"]},
@@ -106,6 +107,46 @@ public class FarmBase : MonoBehaviour
                     {"tier", 0},
                     {"quantity", 0},
                     {"speed", 0},
+
+                    {"harvested", new Inventory()},
+                    {"moneySpent", 1000}
+                };
+
+                return new StructureInstance(id, structurePropreties, anchorLocation);
+
+            case "flowerbed":
+
+                structurePropreties = new Dictionary<string, object>
+                {
+                    {"resource", null},
+                    {"age", 0f},
+                    {"stage", null},
+                    {"hydration", 1f},
+
+                    {"currentlyUpgrading", "tier0"},
+                    {"currentInteraction", null},
+
+                    {"maintenenceTime", (float)FixedVariables.upgradeTimes["structure:flowerbed:tier0"]},
+
+                    {"tier", 0},
+                    {"quantity", 0},
+                    {"soilQuality", 0},
+                    {"soilRetension", 0},
+
+                    {"harvested", new Inventory()},
+                    {"moneySpent", 1000}
+                };
+
+                return new StructureInstance(id, structurePropreties, anchorLocation);
+
+            case "beehouse":
+
+                structurePropreties = new Dictionary<string, object>
+                {
+                    {"age", 0f},
+                    {"stage", 0},
+
+                    {"currentInteraction", null},
 
                     {"harvested", new Inventory()},
                     {"moneySpent", 1000}
@@ -122,7 +163,7 @@ public class FarmBase : MonoBehaviour
                     {"stage", null},
                     {"hydration", 1f},
 
-                    {"currentlyUpgrading", "baseBuild"},
+                    {"currentlyUpgrading", "tier0"},
                     {"currentInteraction", null},
 
                     {"maintenenceTime", (float)FixedVariables.upgradeTimes["structure:farmland:tier0"]},
@@ -186,7 +227,7 @@ public class FarmBase : MonoBehaviour
         public int[] farmSize;
         public TileInstance[,] tiles;
         public StructureInstance[,] ocupiedTiles;
-        public Dictionary<int, StructureInstance> farmStructures;
+        public List<StructureInstance> farmStructures;
         public int structureCount;
 
         public FarmLayout(int[] farmSize){
@@ -194,7 +235,7 @@ public class FarmBase : MonoBehaviour
             this.farmSize = farmSize;
             this.tiles = new TileInstance[farmSize[0], farmSize[1]];
             this.ocupiedTiles = new StructureInstance[farmSize[0], farmSize[1]];
-            this.farmStructures = new Dictionary<int, StructureInstance>();
+            this.farmStructures = new List<StructureInstance>();
             this.structureCount = 0;
         }
 
@@ -213,10 +254,10 @@ public class FarmBase : MonoBehaviour
             }
 
             this.ocupiedTiles = new StructureInstance[farmSize[0], farmSize[1]];
-            Dictionary<int, StructureInstance> structures = farmStructures;
-            farmStructures = new Dictionary<int, StructureInstance>();
+            List<StructureInstance> structures = farmStructures;
+            farmStructures = new List<StructureInstance>();
 
-            foreach (StructureInstance structure in structures.Values){
+            foreach (StructureInstance structure in structures){
 
                 structure.anchorLocation[0] += offset[0];
                 structure.anchorLocation[1] += offset[1];
@@ -228,13 +269,36 @@ public class FarmBase : MonoBehaviour
      
             for (int x = instance.anchorLocation[0]; x < instance.anchorLocation[0] + FarmBase.structureSize[instance.structureId][0]; x++){
                 for (int y = instance.anchorLocation[1]; y < instance.anchorLocation[1] + FarmBase.structureSize[instance.structureId][1]; y++){
-                    if (x < 0 || x >= farmSize[0] || y < 0 || y >= farmSize[1] || ocupiedTiles[x, y] != null){
+                    if (x < 0 || x >= farmSize[0] || y < 0 || y >= farmSize[1] || ocupiedTiles[x, y] != null ||
+                     (FixedVariables.tileRestrictions.ContainsKey(instance.structureId) && !FixedVariables.tileRestrictions[instance.structureId].Contains(tiles[x,y].tileId))){
                         return false;
                     }
                 }
             }
 
             return true;
+        }
+
+        public List<string> getResourcesInRadius(int[] anchor, int radius, string structureId){
+
+            List<StructureInstance> structures = new List<StructureInstance>();
+
+            for (int x = anchor[0] - radius; x < anchor[0] + radius; x++){
+                for (int y = anchor[1] - radius; y < anchor[1] + radius; y++){
+                    if (x >= 0 && x < farmSize[0] && y >= 0 && y < farmSize[1] && ocupiedTiles[x,y] != null &&
+                     ocupiedTiles[x,y].structureId == structureId && !structures.Contains(ocupiedTiles[x,y])){
+                        structures.Add(ocupiedTiles[x,y]);
+                    }
+                }
+            }
+
+            List<string> resources = new List<string>();
+
+            foreach (StructureInstance structure in structures){
+                resources.Add(structure.structurePropreties["resource"].ToString());
+            }
+
+            return resources;
         }
 
         public bool canFitTile(TileInstance tile){
@@ -249,7 +313,8 @@ public class FarmBase : MonoBehaviour
 
             for (int x = instance.anchorLocation[0]; x < instance.anchorLocation[0] + FarmBase.structureSize[instance.structureId][0]; x++){
                 for (int y = instance.anchorLocation[1]; y < instance.anchorLocation[1] + FarmBase.structureSize[instance.structureId][1]; y++){
-                    if (x < 0 || x >= farmSize[0] || y < 0 || y >= farmSize[1] || ocupiedTiles[x, y] != null || tiles[x,y].tileId != "ground:grass"){
+                    if (x < 0 || x >= farmSize[0] || y < 0 || y >= farmSize[1] || ocupiedTiles[x, y] != null ||
+                     (FixedVariables.tileRestrictions.ContainsKey(instance.structureId) && !FixedVariables.tileRestrictions[instance.structureId].Contains(tiles[x,y].tileId))){
                         free[x - instance.anchorLocation[0],y - instance.anchorLocation[1]] = false;
                     }
                     else{ free[x - instance.anchorLocation[0],y - instance.anchorLocation[1]] = true; }
@@ -280,11 +345,23 @@ public class FarmBase : MonoBehaviour
 
         public void insertStructure(StructureInstance instance){
 
-            farmStructures.Add(structureCount++, instance);
+            farmStructures.Add(instance);
+            structureCount++;
 
             for (int x = instance.anchorLocation[0]; x < instance.anchorLocation[0] + FarmBase.structureSize[instance.structureId][0]; x++){
                 for (int y = instance.anchorLocation[1]; y < instance.anchorLocation[1] + FarmBase.structureSize[instance.structureId][1]; y++){
                     ocupiedTiles[x, y] = instance;
+                }
+            }
+        }
+
+        public void removeStructure(StructureInstance instance){
+
+            farmStructures.Remove(instance);
+
+            for (int x = instance.anchorLocation[0]; x < instance.anchorLocation[0] + FarmBase.structureSize[instance.structureId][0]; x++){
+                for (int y = instance.anchorLocation[1]; y < instance.anchorLocation[1] + FarmBase.structureSize[instance.structureId][1]; y++){
+                    ocupiedTiles[x, y] = null;
                 }
             }
         }

@@ -14,6 +14,7 @@ public class CameraController : MonoBehaviour
 
     public bool orthographic;
 
+    public Vector3 lastTapPos;
     private RaycastHit lastHit;
     private Vector3 targetLocation;
     private float targetSize;
@@ -35,6 +36,8 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        lastTapPos = Input.mousePosition;
+
         if (transform.localPosition.x != targetLocation.x){
 
             targetLocation.x = transform.localPosition.x;

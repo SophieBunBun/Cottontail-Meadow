@@ -24,11 +24,7 @@ public class TreeRenderer : MonoBehaviour
 
     public void playLeafParticles(){
 
-        float scale = (float)tree.structurePropreties["age"] /
-                          FarmBase.growthTimes[(string)tree.structurePropreties["resource"] + (int)tree.structurePropreties["stage"]];
-            scale /= (FixedVariables.resourceFinalStage[(string)tree.structurePropreties["resource"]] + 1f);
-            scale += (float)(int)tree.structurePropreties["stage"] / (FixedVariables.resourceFinalStage[(string)tree.structurePropreties["resource"]] + 1f);
-
+        float scale = getScale();
         var shape = particle.shape;
         shape.position = getParticlePosition(scale);
         shape.scale = getParticleScale(scale);
@@ -37,18 +33,38 @@ public class TreeRenderer : MonoBehaviour
         }
     }
 
+    public float getScale(){
+
+        float scale = (float)tree.structurePropreties["age"] /
+                          FarmBase.growthTimes[(string)tree.structurePropreties["resource"] + (int)tree.structurePropreties["stage"]];
+            scale /= (FixedVariables.resourceFinalStage[(string)tree.structurePropreties["resource"]] + 1f);
+            scale += (float)(int)tree.structurePropreties["stage"] / (FixedVariables.resourceFinalStage[(string)tree.structurePropreties["resource"]] + 1f);
+        
+        return scale;
+    }
+
     public void updateStructure(){
 
         if ((int)(float)tree.structurePropreties["age"] != 0)
         {
-            float scale = (float)tree.structurePropreties["age"] /
-                          FarmBase.growthTimes[(string)tree.structurePropreties["resource"] + (int)tree.structurePropreties["stage"]];
-            scale /= (FixedVariables.resourceFinalStage[(string)tree.structurePropreties["resource"]] + 1f);
-            scale += (float)(int)tree.structurePropreties["stage"] / (FixedVariables.resourceFinalStage[(string)tree.structurePropreties["resource"]] + 1f);
-            
+            float scale = getScale();
             treeGraphic.transform.localScale = getScales(scale);
             treeGraphic.transform.localPosition = getPositions(scale);
         }
+    }
+    
+    public void destroyStructure(){
+        Destroy(treeGraphic);
+        Destroy(this.gameObject);
+    }
+
+    public void collectWood(){
+
+        GameObject collectIcon = Instantiate((GameObject)GameManager.Instance.getResource("general:tools:itemPickup"));
+        collectIcon.transform.position = transform.position;
+        collectIcon.transform.rotation = Quaternion.Euler(-45f, 135f, 0f);
+        collectIcon.GetComponent<ItemPickupAnim>().spriteRenderer.sprite =
+            GameManager.Instance.getSprite("sprites:itemIcon:wood");
     }
 
     private static Vector3 getScales(float scale){
