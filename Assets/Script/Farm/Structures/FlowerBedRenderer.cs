@@ -105,8 +105,8 @@ public class FlowerBedRenderer : MonoBehaviour
             for (int x = 0; x < 3; x++){
                 for (int y = 0; y < 5; y++){
 
-                    if ( 1.25f - (2.3f) * y + (1.25f / 4) * (x % 2) <= 1.25f && 1.25f - (2.3f) * y + (1.25f / 2) * (x % 2) >= -1.25f){
-                        insertCrop(1.35f - (1.35f) * x + Random.Range(-0.1f, 0.1f), 1.25f - (2.3f) * y + (1.25f / 2) * (x % 2) + Random.Range(-0.1f, 0.1f));
+                    if ( 1.25f - (2.3f) * y + (2.3f / 4) * (x % 2) <= 1.25f && 1.25f - (2.3f) * y + (2.3f / 2) * (x % 2) >= -1.25f){
+                        insertCrop(1.35f - (1.35f) * x + Random.Range(-0.1f, 0.1f), 1.25f - (2.3f) * y + (2.3f / 2) * (x % 2) + Random.Range(-0.1f, 0.1f));
                     }
                 }
             }
@@ -116,8 +116,8 @@ public class FlowerBedRenderer : MonoBehaviour
             for (int x = 0; x < 5; x++){
                 for (int y = 0; y < 7; y++){
 
-                    if ( 1.25f - (2.3f / 2) * y + (1.25f / 4) * (x % 2) <= 1.25f && 1.25f - (2.3f / 2) * y + (1.25f / 4) * (x % 2) >= -1.25f){
-                        insertCrop(1.35f - (1.35f) * x + Random.Range(-0.1f, 0.1f), 1.25f - (2.3f / 2) * y + (1.25f / 4) * (x % 2) + Random.Range(-0.1f, 0.1f));
+                    if ( 1.25f - (2.3f / 2) * y + (2.3f / 4) * (x % 2) <= 1.25f && 1.25f - (2.3f / 2) * y + (2.3f / 4) * (x % 2) >= -1.25f){
+                        insertCrop(1.35f - (1.35f) * x + Random.Range(-0.1f, 0.1f), 1.25f - (2.3f / 2) * y + (2.3f / 4) * (x % 2) + Random.Range(-0.1f, 0.1f));
                     }
                 }
             }
@@ -127,8 +127,8 @@ public class FlowerBedRenderer : MonoBehaviour
             for (int x = 0; x < 5; x++){
                 for (int y = 0; y < 9; y++){
 
-                    if ( 1.25f - (2.3f / 3) * y + (1.25f / 6) * (x % 2) <= 1.25f && 1.25f - (2.3f / 3) * y + (1.25f / 6) * (x % 2) >= -1.25f){
-                        insertCrop(1.35f - (1.35f) * x + Random.Range(-0.1f, 0.1f), 1.25f - (2.3f / 3) * y + (1.25f / 6) * (x % 2) + Random.Range(-0.1f, 0.1f));
+                    if ( 1.25f - (2.3f / 3) * y + (2.3f / 6) * (x % 2) <= 1.25f && 1.25f - (2.3f / 3) * y + (2.3f / 6) * (x % 2) >= -1.25f){
+                        insertCrop(1.35f - (1.35f) * x + Random.Range(-0.1f, 0.1f), 1.25f - (2.3f / 3) * y + (2.3f / 6) * (x % 2) + Random.Range(-0.1f, 0.1f));
                     }
                 }
             }
@@ -194,7 +194,7 @@ public class FlowerBedRenderer : MonoBehaviour
         interactionAnouncement = Instantiate((GameObject)GameManager.Instance.getResource("general:tools:empty"), transform);
         GameObject hudPopUp = Instantiate((GameObject)GameManager.Instance.getResource("general:tools:upDownBobPointer"), interactionAnouncement.transform);
         hudPopUp.GetComponentInChildren<SpriteRenderer>().sprite =
-         GameManager.Instance.getSprite(FixedVariables.interactionIcons["farmland:" + farmStructure.structurePropreties["currentInteraction"]]);
+         GameManager.Instance.getSprite(FixedVariables.interactionIcons["flowerbed:" + farmStructure.structurePropreties["currentInteraction"]]);
         hudPopUp.transform.localPosition = new Vector3 (0, 2, 0);
     }
 

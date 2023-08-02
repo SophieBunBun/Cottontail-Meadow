@@ -20,6 +20,17 @@ public class FixedVariables : MonoBehaviour
         {"pickaxe", new string[] {}},
     };
 
+    public static Dictionary<string, string> toolIcons = new Dictionary<string, string>{
+
+        {"inspect", "sprites:buttonIcons:inspect"},
+        {"wateringcan", "sprites:buttonIcons:wateringcan"},
+        {"axe", "sprites:buttonIcons:axe"},
+        {"pickaxe", "sprites:buttonIcons:pickaxe"},
+        {"build", "sprites:buttonIcons:build"},
+        {"move", "sprites:buttonIcons:move"},
+        {"destroy", "sprites:buttonIcons:destroy"},
+    };
+
     //Tool use
     public static Dictionary<string, float> miningTime = new Dictionary<string, float>
     {
@@ -141,12 +152,12 @@ public class FixedVariables : MonoBehaviour
         {"farmland:harvestPlant", "sprites:interactionIcon:farmlandCropReady"},
 
         {"flowerbed:finishUpgrade", "sprites:interactionIcon:maintnenceComplete"},
-        {"flowerbed:harvestPlant", "sprites:interactionIcon:farmlandCropReady"},
+        {"flowerbed:harvestPlant", "sprites:interactionIcon:flowerbedFlowerReady"},
 
         {"beehouse:harvestResource", "sprites:interactionIcon:farmlandCropReady"},
 
         {"furnace:finishUpgrade", "sprites:interactionIcon:maintnenceComplete"},
-        {"furnace:harvestResource", "sprites:interactionIcon:farmlandCropReady"},
+        {"furnace:harvestResource", "sprites:interactionIcon:furnaceResourceReady"},
     };
 
     public static Dictionary<string, string> decorNames = new Dictionary<string, string>{
@@ -264,7 +275,7 @@ public class FixedVariables : MonoBehaviour
         {"flowerbed:pinkorchid", 1},
         {"flowerbed:blueorchid", 1},
         {"flowerbed:whiteorchid", 1},
-        {"flowerbed:prangeorchid", 1},
+        {"flowerbed:orangeorchid", 1},
 
         {"beehouse", 2},
 
@@ -283,7 +294,7 @@ public class FixedVariables : MonoBehaviour
         {"flowerbed:pinkorchid", 0},
         {"flowerbed:blueorchid", 0},
         {"flowerbed:whiteorchid", 0},
-        {"flowerbed:prangeorchid", 0},
+        {"flowerbed:orangeorchid", 0},
 
         {"beehouse", 0},
     };
@@ -326,14 +337,14 @@ public class FixedVariables : MonoBehaviour
 
     public static Dictionary<string, string> structureIcons = new Dictionary<string, string>{
 
-        {"farmland", "sprites:upgradeIcon:farmlandCrop"},
-        {"flowerbed", "sprites:upgradeIcon:farmlandCrop"},
-        {"furnace", "sprites:upgradeIcon:farmlandCrop"},
-        {"beehouse", "sprites:upgradeIcon:farmlandCrop"},
+        {"farmland", "sprites:structureIcon:farmland"},
+        {"flowerbed", "sprites:structureIcon:flowerbed"},
+        {"furnace", "sprites:structureIcon:furnace"},
+        {"beehouse", "sprites:structureIcon:beehouse"},
     };
 
     public static string[] structureBuildList = new string[] {"farmland", "flowerbed", "furnace", "beehouse"};
-    public static string[] decorBuildList = new string[] {"tile", "tree", "fruittree"};
+    public static string[] decorBuildList = new string[] {"tile", "tree"}; //Add fruittree back
 
     //UpgradeEffects
     public static Dictionary<string, int> harvestCount = new Dictionary<string, int>{
@@ -675,7 +686,7 @@ public class FixedVariables : MonoBehaviour
         {"structure:farmland:soilRetension2", "Soil Retension 2"},
         {"structure:farmland:soilRetension3", "Soil Retension 3"},
 
-        {"structure:flowerbed:resource", "Plant Crop"},
+        {"structure:flowerbed:resource", "Plant Flower"},
         {"structure:flowerbed:quantity1", "Quantity 1"},
         {"structure:flowerbed:quantity2", "Quantity 2"},
         {"structure:flowerbed:soilQuality1", "Soil Quality 1"},
@@ -707,25 +718,25 @@ public class FixedVariables : MonoBehaviour
         {"structure:farmland:soilRetension2", "sprites:upgradeIcon:farmlandSoilRetension"},
         {"structure:farmland:soilRetension3", "sprites:upgradeIcon:farmlandSoilRetension"},
 
-        {"structure:flowerbed:resource", "sprites:upgradeIcon:farmlandCrop"},
-        {"structure:flowerbed:quantity1", "sprites:upgradeIcon:farmlandQuantity"},
-        {"structure:flowerbed:quantity2", "sprites:upgradeIcon:farmlandQuantity"},
-        {"structure:flowerbed:soilQuality1", "sprites:upgradeIcon:farmlandSoilQuality"},
-        {"structure:flowerbed:soilQuality2", "sprites:upgradeIcon:farmlandSoilQuality"},
-        {"structure:flowerbed:soilQuality3", "sprites:upgradeIcon:farmlandSoilQuality"},
+        {"structure:flowerbed:resource", "sprites:upgradeIcon:flowerbedFlower"},
+        {"structure:flowerbed:quantity1", "sprites:upgradeIcon:flowerbedQuantity"},
+        {"structure:flowerbed:quantity2", "sprites:upgradeIcon:flowerbedQuantity"},
+        {"structure:flowerbed:soilQuality1", "sprites:upgradeIcon:flowerbedSoilQuality"},
+        {"structure:flowerbed:soilQuality2", "sprites:upgradeIcon:flowerbedSoilQuality"},
+        {"structure:flowerbed:soilQuality3", "sprites:upgradeIcon:flowerbedSoilQuality"},
         {"structure:flowerbed:soilRetension1", "sprites:upgradeIcon:farmlandSoilRetension"},
         {"structure:flowerbed:soilRetension2", "sprites:upgradeIcon:farmlandSoilRetension"},
         {"structure:flowerbed:soilRetension3", "sprites:upgradeIcon:farmlandSoilRetension"},
 
-        {"structure:furnace:resource", "sprites:upgradeIcon:farmlandCrop"},
-        {"structure:furnace:tier1", "sprites:upgradeIcon:farmlandQuantity"},
-        {"structure:furnace:tier2", "sprites:upgradeIcon:farmlandQuantity"},
-        {"structure:furnace:quantity1", "sprites:upgradeIcon:farmlandQuantity"},
-        {"structure:furnace:quantity2", "sprites:upgradeIcon:farmlandQuantity"},
-        {"structure:furnace:quantity3", "sprites:upgradeIcon:farmlandQuantity"},
-        {"structure:furnace:speed1", "sprites:upgradeIcon:farmlandQuantity"},
-        {"structure:furnace:speed2", "sprites:upgradeIcon:farmlandQuantity"},
-        {"structure:furnace:speed3", "sprites:upgradeIcon:farmlandQuantity"},
+        {"structure:furnace:resource", "sprites:upgradeIcon:furnaceResource"},
+        {"structure:furnace:tier1", "sprites:upgradeIcon:furnaceTier"},
+        {"structure:furnace:tier2", "sprites:upgradeIcon:furnaceTier"},
+        {"structure:furnace:quantity1", "sprites:upgradeIcon:furnaceQuantity"},
+        {"structure:furnace:quantity2", "sprites:upgradeIcon:furnaceQuantity"},
+        {"structure:furnace:quantity3", "sprites:upgradeIcon:furnaceQuantity"},
+        {"structure:furnace:speed1", "sprites:upgradeIcon:furnaceSpeed"},
+        {"structure:furnace:speed2", "sprites:upgradeIcon:furnaceSpeed"},
+        {"structure:furnace:speed3", "sprites:upgradeIcon:furnaceSpeed"},
     };
     public static Dictionary<string, Item[]> upgradeRequirements = new Dictionary<string, Item[]>{
 

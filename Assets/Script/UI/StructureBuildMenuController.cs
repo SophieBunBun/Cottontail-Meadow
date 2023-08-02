@@ -13,7 +13,9 @@ public class StructureBuildMenuController : MonoBehaviour
     public CanvasGroup canvasGroup;
     public Button closeUIButton;
 
-    [Header("Structure buttons")]
+    [Header("Main panel")]
+    public Image icon;
+    public TextMeshProUGUI title;
     public RectTransform content;
     
     [Header("BuildProceedWindow")]
@@ -211,7 +213,14 @@ public class StructureBuildMenuController : MonoBehaviour
     public void openForBuild(){
 
         createBuildButtons();
+        setBuildMenu();
         StartCoroutine(OpenUI());
+    }
+
+    public void setBuildMenu(){
+
+        icon.sprite = GameManager.Instance.getSprite("sprites:buttonIcons:build");
+        title.text = "Buildings";
     }
 
     public void openForDestroy(){

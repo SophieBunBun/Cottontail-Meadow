@@ -34,7 +34,7 @@ public class StructureStatPanelController : MonoBehaviour
 
     private void setStructureInfo(){
 
-        structureName.text = FarmBase.structureNames[structure.structureId];
+        structureName.text = FixedVariables.structureNames[structure.structureId];
         structureIcon.sprite = GameManager.Instance.getSprite(string.Format("sprites:structureIcon:{0}", structure.structureId));
     }
 

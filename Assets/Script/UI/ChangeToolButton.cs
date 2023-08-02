@@ -45,7 +45,7 @@ public class ChangeToolButton : MonoBehaviour
             if (tool != GameManager.Instance.tool){
                 ButtonLayout button = Instantiate(
                 (GameObject)GameManager.Instance.getResource("general:ui:basicbutton"), contents).GetComponent<ButtonLayout>();
-                //button.icon.sprite =
+                button.icon.sprite = GameManager.Instance.getSprite(string.Format("sprites:buttonIcons:{0}", tool));
                 button.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
                 button.button.onClick.AddListener(delegate {ChangeToTool(tool);});
                 StartCoroutine(UIUtils.movePanel(button.transform, new Vector2(-50f, -25f), new Vector2(currentDistance, -25f)));
@@ -55,6 +55,7 @@ public class ChangeToolButton : MonoBehaviour
 
         changeTool.button.onClick.RemoveAllListeners();
         changeTool.button.onClick.AddListener(delegate {ChangeToTool(GameManager.Instance.tool);});
+        changeTool.icon.sprite = GameManager.Instance.getSprite(string.Format("sprites:buttonIcons:{0}", GameManager.Instance.tool));
     }
 
     public void ChangeToTool(string tool){
@@ -76,7 +77,7 @@ public class ChangeToolButton : MonoBehaviour
 
             ButtonLayout button = Instantiate(
             (GameObject)GameManager.Instance.getResource("general:ui:basicbutton"), contents).GetComponent<ButtonLayout>();
-            //button.icon.sprite =
+            button.icon.sprite = GameManager.Instance.getSprite(string.Format("sprites:buttonIcons:{0}", option));
             button.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
             SetSpecialListener(button, option);
             StartCoroutine(UIUtils.movePanel(button.transform, new Vector2(-50f, -25f), new Vector2(currentDistance, -25f)));
@@ -85,6 +86,7 @@ public class ChangeToolButton : MonoBehaviour
 
         changeTool.button.onClick.RemoveAllListeners();
         changeTool.button.onClick.AddListener(delegate {ChooseTool();});
+        changeTool.icon.sprite = GameManager.Instance.getSprite(string.Format("sprites:buttonIcons:{0}", GameManager.Instance.tool));
     }
 
     public void SetSpecialListener(ButtonLayout button, string set){
