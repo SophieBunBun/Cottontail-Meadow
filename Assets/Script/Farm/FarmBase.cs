@@ -30,7 +30,7 @@ public class FarmBase : MonoBehaviour
 
     public static Dictionary<string, int[]> structureSize = new Dictionary<string, int[]>
     {
-        {"smallHouse1", new int[] {3,3}},
+        {"basichouse", new int[] {3,3}},
         {"furnace",  new int[]  {3,2}},
         {"farmland",  new int[]  {4,4}},
         {"beehouse",  new int[]  {1,1}},
@@ -154,6 +154,12 @@ public class FarmBase : MonoBehaviour
 
                 return new StructureInstance(id, structurePropreties, anchorLocation);
 
+            case "basichouse":
+
+                structurePropreties = new Dictionary<string, object>{};
+
+                return new StructureInstance(id, structurePropreties, anchorLocation);
+
             case "farmland":
 
                 structurePropreties = new Dictionary<string, object>
@@ -207,6 +213,13 @@ public class FarmBase : MonoBehaviour
             this.structureId = structureId;
             this.structurePropreties = structurePropreties;
             this.anchorLocation = anchorLocation;
+        }
+
+        public StructureInstance clone(){
+
+            int[] newAnchor = new int[]{anchorLocation[0], anchorLocation[1]};
+
+            return new StructureInstance(this.structureId, this.structurePropreties, newAnchor);
         }
     }
 

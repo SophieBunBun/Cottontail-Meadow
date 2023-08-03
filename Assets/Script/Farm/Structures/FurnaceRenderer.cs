@@ -17,7 +17,7 @@ public class FurnaceRenderer : MonoBehaviour
         statisticsSign.structure = farmStructure;
 
         //Setting anchor location
-        transform.position = new Vector3((farmStructure.anchorLocation[0] + FarmBase.structureSize[farmStructure.structureId][0] / 2f) * 2f ,-0.5f ,
+        transform.position = new Vector3((farmStructure.anchorLocation[0] + FarmBase.structureSize[farmStructure.structureId][0] / 2f) * 2f ,0.01f ,
                                     (farmStructure.anchorLocation[1] + FarmBase.structureSize[farmStructure.structureId][1] / 2f) * 2f);
         transform.eulerAngles = new Vector3(0f, 180f, 0f);
 
@@ -62,7 +62,7 @@ public class FurnaceRenderer : MonoBehaviour
         if (farmStructure.structurePropreties["currentlyUpgrading"] != null)
         {
             maintnenceSign = Instantiate((GameObject)GameManager.Instance.getResource("structures:farmland:maintnencesign"), transform);
-            maintnenceSign.transform.localPosition = new Vector3(-1.8f, 1.5f, 2f);
+            maintnenceSign.transform.localPosition = new Vector3(-1.8f, 1f, 2f);
         }
     }
 
@@ -89,7 +89,7 @@ public class FurnaceRenderer : MonoBehaviour
         GameObject hudPopUp = Instantiate((GameObject)GameManager.Instance.getResource("general:tools:upDownBobPointer"), interactionAnouncement.transform);
         hudPopUp.GetComponentInChildren<SpriteRenderer>().sprite =
          GameManager.Instance.getSprite(FixedVariables.interactionIcons["furnace:" + farmStructure.structurePropreties["currentInteraction"]]);
-        hudPopUp.transform.localPosition = new Vector3 (0, 5, 0);
+        hudPopUp.transform.localPosition = new Vector3 (0, 5.5f, 0);
     }
 
     public void collectResource(){

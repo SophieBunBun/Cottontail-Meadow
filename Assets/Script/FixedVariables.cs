@@ -154,7 +154,7 @@ public class FixedVariables : MonoBehaviour
         {"flowerbed:finishUpgrade", "sprites:interactionIcon:maintnenceComplete"},
         {"flowerbed:harvestPlant", "sprites:interactionIcon:flowerbedFlowerReady"},
 
-        {"beehouse:harvestResource", "sprites:interactionIcon:farmlandCropReady"},
+        {"beehouse:harvestResource", "sprites:interactionIcon:beehouseHoneyReady"},
 
         {"furnace:finishUpgrade", "sprites:interactionIcon:maintnenceComplete"},
         {"furnace:harvestResource", "sprites:interactionIcon:furnaceResourceReady"},
@@ -190,7 +190,7 @@ public class FixedVariables : MonoBehaviour
         {"tree", new string[] {
             "tree:oak",
             "tree:pine",
-            "tree:cherry"
+        //    "tree:cherry"
         }},
         {"fruittree", new string[] {
             "fruittree:apple"
@@ -232,11 +232,14 @@ public class FixedVariables : MonoBehaviour
 
     public static Dictionary<string, string> decorIcons = new Dictionary<string, string>{
 
-        {"tile", "Tiles"},
-        {"ground:grass", "Grass"},
-        {"path:dirt", "Dirt path"},
-        {"path:brick", "Dirt path"},
-        {"path:water", "Water tile"},
+        {"tile:tile:grass", "sprites:decorIcon:grass"},
+        {"tile:path:dirt", "sprites:decorIcon:dirtPath"},
+        {"tile:path:brick", "sprites:decorIcon:brickPath"},
+        {"tile:path:gravel", "sprites:decorIcon:gravelPath"},
+        {"tile:path:water", "sprites:decorIcon:water"},
+
+        {"tree:oak", "sprites:decorIcon:oakTree"},
+        {"tree:pine", "sprites:decorIcon:oakTree"},
     };
 
     public static Dictionary<string, string> structureNames = new Dictionary<string, string>{
@@ -280,6 +283,7 @@ public class FixedVariables : MonoBehaviour
         {"beehouse", 2},
 
         {"tree:oak", 2},
+        {"tree:pine", 0},
         
     };
 
@@ -322,6 +326,9 @@ public class FixedVariables : MonoBehaviour
         {"beehouse", new Item[] {
             new Item("money", 1000)
         }},
+        {"basichouse", new Item[] {
+            new Item("money", 0)
+        }},
     };
 
     public static Dictionary<string, bool> isDecor = new Dictionary<string, bool>{
@@ -330,6 +337,7 @@ public class FixedVariables : MonoBehaviour
         {"flowerbed", false},
         {"furnace", false},
         {"beehouse", false},
+        {"basichouse", false},
 
         {"tree", true},
         {"fruittree", true}
@@ -341,6 +349,8 @@ public class FixedVariables : MonoBehaviour
         {"flowerbed", "sprites:structureIcon:flowerbed"},
         {"furnace", "sprites:structureIcon:furnace"},
         {"beehouse", "sprites:structureIcon:beehouse"},
+        {"tile", "sprites:structureIcon:tile"},
+        {"tree", "sprites:structureIcon:tree"},
     };
 
     public static string[] structureBuildList = new string[] {"farmland", "flowerbed", "furnace", "beehouse"};
@@ -551,9 +561,7 @@ public class FixedVariables : MonoBehaviour
         {"tree:oak0", 200f},
         {"tree:oak1", 200f},
         {"tree:oak2", 200f},
-        {"tree:pine0", 200f},
-        {"tree:pine1", 200f},
-        {"tree:pine2", 200f},
+        {"tree:pine0", 600f},
         {"tree:cherry0", 200f},
         {"tree:cherry1", 200f},
         {"tree:cherry2", 200f},

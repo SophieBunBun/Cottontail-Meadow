@@ -25,6 +25,7 @@ public class Farm : MonoBehaviour
         Instance = this;
         farmLayout = new FarmBase.FarmLayout(farmSize);
         buildFarm();
+        insertStructure(FarmBase.createStructureInstance("basichouse", new int[]{9, 9}));
     }
 
     void Update()
@@ -148,7 +149,7 @@ public class Farm : MonoBehaviour
 
         foreach (FarmBase.StructureInstance structure in structRenderers.Keys){
 
-            switch (structure.structureId){
+            if (structRenderers[structure].activeSelf) switch (structure.structureId){
 
                 case "furnace" :
 
@@ -372,9 +373,14 @@ public class Farm : MonoBehaviour
                 tree.GetComponent<TreeRenderer>().tree = structure;
                 tree.GetComponent<TreeRenderer>().deepUpdateStructure();
                 return tree;
-        }
 
-        return null;
+            default :
+                
+                GameObject basic = Instantiate((GameObject)GameManager.Instance.getResource("structures:structures:" + structure.structureId), structures.transform);
+                basic.GetComponent<BasicRenderer>().farmStructure = structure;
+                basic.GetComponent<BasicRenderer>().deepUpdateStructure();
+                return basic;
+        }
     }
 
     public void destroyStructure(FarmBase.StructureInstance structure){
@@ -404,6 +410,11 @@ public class Farm : MonoBehaviour
             case "tree" :
 
                 structRenderers[structure].GetComponent<TreeRenderer>().destroyStructure();
+                break;
+
+            default :
+
+                structRenderers[structure].GetComponent<BasicRenderer>().destroyStructure();
                 break;
         }
 

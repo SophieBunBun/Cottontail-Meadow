@@ -90,11 +90,11 @@ public class GameManager : MonoBehaviour
 
             break;
 
-            case "destroyMode":
+            case "moveMode":
 
                 playerMovement.stopCharacter();
                 if(!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()
-                && Input.GetButton("Tap")){ uiController.buildMenu.askForDestruction(Interact.getStructure(cameraController.raycast())); }
+                && Input.GetButton("Tap")){ uiController.buildMenu.moveBuilding(Interact.getStructure(cameraController.raycast())); }
 
             break;
 
@@ -123,26 +123,27 @@ public class GameManager : MonoBehaviour
             case "farmRoaming":
 
                 uiController.farmRoamingMode();
-
-            break;
+                break;
 
             case "farmPrompt":
 
                 uiController.farmPromptMode();
-
-            break;
+                break;
 
             case "buildPlan":
 
                 uiController.buildPlanMode();
-
-            break;
+                break;
 
             case "destroyMode":
 
                 uiController.buildPlanMode();
+                break;
 
-            break;
+            case "moveMode":
+
+                uiController.buildPlanMode();
+                break;
         }
 
         this.state = state;
@@ -172,9 +173,6 @@ public class GameManager : MonoBehaviour
                 new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:carrot"},
                 new string[] {"Textures/Sprites/ResourceIcons/potatoCropIcon", "sprites:resourceIcon:potato"},
                 new string[] {"Textures/Sprites/ResourceIcons/tomatoCropIcon", "sprites:resourceIcon:tomato"},
-                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:honey"},
-                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:hydrahoney"},
-                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:orchidhoney"},
                 new string[] {"Textures/Sprites/ResourceIcons/pinkHydraFlowerIcon", "sprites:resourceIcon:pinkhydra"},
                 new string[] {"Textures/Sprites/ResourceIcons/blueHydraFlowerIcon", "sprites:resourceIcon:bluehydra"},
                 new string[] {"Textures/Sprites/ResourceIcons/pinkOrchidFlowerIcon", "sprites:resourceIcon:pinkorchid"},
@@ -190,12 +188,21 @@ public class GameManager : MonoBehaviour
                 new string[] {"Textures/Sprites/StructureIcons/flowerbed", "sprites:structureIcon:flowerbed"},
                 new string[] {"Textures/Sprites/StructureIcons/furnace", "sprites:structureIcon:furnace"},
                 new string[] {"Textures/Sprites/StructureIcons/beehouse", "sprites:structureIcon:beehouse"},
+                new string[] {"Textures/Sprites/StructureIcons/tile", "sprites:structureIcon:tile"},
+                new string[] {"Textures/Sprites/StructureIcons/tree", "sprites:structureIcon:tree"},
+
+                new string[] {"Textures/Sprites/DecorIcons/oakTreeIcon", "sprites:decorIcon:oakTree"},
+                new string[] {"Textures/Sprites/DecorIcons/brickPathIcon", "sprites:decorIcon:brickPath"},
+                new string[] {"Textures/Sprites/DecorIcons/dirtPathIcon", "sprites:decorIcon:dirtPath"},
+                new string[] {"Textures/Sprites/DecorIcons/grassIcon", "sprites:decorIcon:grass"},
+                new string[] {"Textures/Sprites/DecorIcons/gravelPathIcon", "sprites:decorIcon:gravelPath"},
+                new string[] {"Textures/Sprites/DecorIcons/waterPathIcon", "sprites:decorIcon:water"},
 
                 new string[] {"Textures/Sprites/ItemIcons/moneyItem", "sprites:itemIcon:money"},
                 new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:carrot"},
-                new string[] {"Textures/Sprites/ItemIcons/potatoItem", "sprites:itemIcon:potato"},
-                new string[] {"Textures/Sprites/ItemIcons/tomatoItem", "sprites:itemIcon:tomato"},
-                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:honey"},
+                new string[] {"Textures/Sprites/ItemIcons/hydraHoneyItem", "sprites:itemIcon:potato"},
+                new string[] {"Textures/Sprites/ItemIcons/orchidHoneyItem", "sprites:itemIcon:tomato"},
+                new string[] {"Textures/Sprites/ItemIcons/wildHoneyItem", "sprites:itemIcon:honey"},
                 new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:hydrahoney"},
                 new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:orchidhoney"},
                 new string[] {"Textures/Sprites/ItemIcons/pinkHydraItem", "sprites:itemIcon:pinkhydra"},
@@ -221,6 +228,7 @@ public class GameManager : MonoBehaviour
                 new string[] {"Textures/Sprites/InteractionIcons/farmlandCropReady", "sprites:interactionIcon:farmlandCropReady"},
                 new string[] {"Textures/Sprites/InteractionIcons/flowerBedFlowerReady", "sprites:interactionIcon:flowerbedFlowerReady"},
                 new string[] {"Textures/Sprites/InteractionIcons/furnaceResourceReady", "sprites:interactionIcon:furnaceResourceReady"},
+                new string[] {"Textures/Sprites/InteractionIcons/beehouseHoneyReady", "sprites:interactionIcon:beehouseHoneyReady"},
 
                 new string[] {"Textures/Sprites/ButtonIcons/inspect", "sprites:buttonIcons:inspect"},
                 new string[] {"Textures/Sprites/ButtonIcons/wateringcan", "sprites:buttonIcons:wateringcan"},
@@ -250,6 +258,9 @@ public class GameManager : MonoBehaviour
                 new string[] {"Prefabs/Farm/Tiles/tile", "tiles:ground:tile"},
                 new string[] {"Prefabs/Farm/Border/BorderStraight", "border:tile:straight"},
                 new string[] {"Prefabs/Farm/Border/BorderCorner", "border:tile:corner"},
+
+                //Basics
+                new string[] {"Prefabs/Farm/Structures/House/basicFarmhouseStruct", "structures:structures:basichouse"},
 
                 //Farmland
                 new string[] {"Prefabs/Farm/Farmland/farmLandStruct", "structures:structures:farmland"},
@@ -295,12 +306,14 @@ public class GameManager : MonoBehaviour
                 //Trees
                 new string[] {"Prefabs/Farm/Farmland/TreeStruct", "structures:structures:tree"},
 
-                new string[] {"Textures/Folliage/Trees/OakTreeMat/oakTree1", "structures:tree:oak0"},
-                new string[] {"Textures/Folliage/Trees/OakTreeMat/oakTree2", "structures:tree:oak1"},
-                new string[] {"Textures/Folliage/Trees/OakTreeMat/oakTree3", "structures:tree:oak2"},
-                new string[] {"Textures/Folliage/Trees/OakTreeMat/oakTree1Shaded", "structures:tree:oak0Shaded"},
-                new string[] {"Textures/Folliage/Trees/OakTreeMat/oakTree2Shaded", "structures:tree:oak1Shaded"},
-                new string[] {"Textures/Folliage/Trees/OakTreeMat/oakTree3Shaded", "structures:tree:oak2Shaded"},
+                new string[] {"Textures/Folliage/Trees/OakTree/oakTree1Mat", "structures:tree:oak0"},
+                new string[] {"Textures/Folliage/Trees/OakTree/oakTree2Mat", "structures:tree:oak1"},
+                new string[] {"Textures/Folliage/Trees/OakTree/oakTree3Mat", "structures:tree:oak2"},
+                new string[] {"Textures/Folliage/Trees/OakTree/oakTree1ShadedMat", "structures:tree:oak0Shaded"},
+                new string[] {"Textures/Folliage/Trees/OakTree/oakTree2ShadedMat", "structures:tree:oak1Shaded"},
+                new string[] {"Textures/Folliage/Trees/OakTree/oakTree3ShadedMat", "structures:tree:oak2Shaded"},
+
+                new string[] {"Textures/Folliage/Trees/PineTree/pineTree1Mat", "structures:tree:pine0"},
 
                 //Paths & tiles
                 new string[] {"Textures/Tiles/Grass/GrassMat", "materials:tile:grass"},

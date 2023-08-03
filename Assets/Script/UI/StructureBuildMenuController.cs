@@ -223,6 +223,25 @@ public class StructureBuildMenuController : MonoBehaviour
         title.text = "Buildings";
     }
 
+    public void openForMove(){
+
+        GameManager.Instance.changeState("moveMode");
+        StartCoroutine(UIController.Instance.buildPlanHUD.OpenElement(true));
+        UIController.Instance.buildPlanHUD.goBack.onClick.RemoveAllListeners();
+        UIController.Instance.buildPlanHUD.goBack.onClick.AddListener(delegate {exitDestroyMode();});
+    }
+
+    public void moveBuilding(FarmBase.StructureInstance structure){
+
+        if (structure != null){
+
+            StartCoroutine(UIController.Instance.buildPlanHUD.CloseElement());
+            FarmBase.StructureInstance newStructure = structure.clone();
+            Farm.Instance.destroyStructure(structure);
+            enterStructurePlanMode(newStructure, structure);
+        }
+    }
+
     public void openForDestroy(){
         
         GameManager.Instance.changeState("destroyMode");
@@ -254,10 +273,6 @@ public class StructureBuildMenuController : MonoBehaviour
                 Farm.Instance.destroyStructure(structure);
                 GameManager.Instance.changeState("farmRoaming");});
         }
-    }
-
-    public void openForMove(){
-
     }
 
     private void createBuildButtons(){
@@ -351,7 +366,7 @@ public class StructureBuildMenuController : MonoBehaviour
                 }
                 
                 decorButton.text.text = FixedVariables.decorNames[decor];
-                //decorButton.icon.sprite = GameManager.Instance.getSprite("sprites:resourceIcon:" + decor.Split(":")[1]);
+                decorButton.icon.sprite = GameManager.Instance.getSprite(FixedVariables.decorIcons[decor]);
                 decorButton.button.onClick.AddListener(delegate {setDecorButton(decorButton); setDecorSelection(decor);});
 
                 decorButtons.Add(decorButton);
@@ -401,7 +416,7 @@ public class StructureBuildMenuController : MonoBehaviour
 
     private void setDecorInfo(string decorId){
 
-        //decorIcon.sprite = GameManager.Instance.getSprite(FixedVariables.decorIcons[decorId]);
+        decorIcon.sprite = GameManager.Instance.getSprite(FixedVariables.structureIcons[decorId]);
         decorName.text = FixedVariables.decorNames[decorId];
         decorDescription.text = FixedVariables.decorDescriptions[decorId];
     }
@@ -426,12 +441,12 @@ public class StructureBuildMenuController : MonoBehaviour
         }
     }
 
-    private void enterStructurePlanMode(FarmBase.StructureInstance structure){
+    private void enterStructurePlanMode(FarmBase.StructureInstance structure, FarmBase.StructureInstance oldStructure = null){
 
         buildPlan = Instantiate((GameObject)GameManager.Instance.getResource("planning:farm:buildplan")).GetComponent<BuildPlan>();
         buildPlan.transform.position = new Vector3(-20f, 0, -20f);
         buildPlan.setStructure(structure);
-        setPlanMode(false);
+        setPlanMode(false, oldStructure);
     }
 
     private void enterTilePlanMode(string tileId){
@@ -439,12 +454,14 @@ public class StructureBuildMenuController : MonoBehaviour
         buildPlan = Instantiate((GameObject)GameManager.Instance.getResource("planning:farm:buildplan")).GetComponent<BuildPlan>();
         buildPlan.transform.position = new Vector3(-20f, 0, -20f);
         buildPlan.setTile(new FarmBase.TileInstance(tileId.Remove(0, 5), new Vector2(0, 0)));
-        setPlanMode(true);
+        setPlanMode(true, null);
     }
     
-    private void setPlanMode(bool free){
+    private void setPlanMode(bool free, FarmBase.StructureInstance oldStructure = null){
 
-        StartCoroutine(planUI(free));
+        if (oldStructure != null) {StartCoroutine(UIController.Instance.buildPlanHUD.OpenElement(false));}
+        else {StartCoroutine(planUI(free));}
+
         if (free){
             UIController.Instance.buildPlanHUD.goBack.onClick.RemoveAllListeners();
             UIController.Instance.buildPlanHUD.goBack.onClick.AddListener(delegate {exitPlanMode();});
@@ -452,7 +469,7 @@ public class StructureBuildMenuController : MonoBehaviour
         }
         else{
             UIController.Instance.buildPlanHUD.cancel.onClick.RemoveAllListeners();
-            UIController.Instance.buildPlanHUD.cancel.onClick.AddListener(delegate {exitPlanMode();});
+            UIController.Instance.buildPlanHUD.cancel.onClick.AddListener(delegate {exitPlanMode(oldStructure);});
             UIController.Instance.buildPlanHUD.confirm.interactable = false;
             UIController.Instance.buildPlanHUD.confirm.onClick.RemoveAllListeners();
             UIController.Instance.buildPlanHUD.confirm.onClick.AddListener(delegate {concludePlan();});
@@ -460,11 +477,18 @@ public class StructureBuildMenuController : MonoBehaviour
         }
     }
 
-    private void exitPlanMode(){
+    private void exitPlanMode(FarmBase.StructureInstance oldStructure = null){
 
         buildPlan.Destroy();
-        StartCoroutine(CancelPlanUI());
-        GameManager.Instance.changeState("farmPrompt");
+        if (oldStructure != null) {
+            Farm.Instance.insertStructure(oldStructure); 
+            StartCoroutine(UIController.Instance.buildPlanHUD.CloseElement());
+            GameManager.Instance.changeState("farmRoaming");
+        } 
+        else {
+            StartCoroutine(CancelPlanUI());
+            GameManager.Instance.changeState("farmPrompt");
+        }
     }
 
     private void concludePlan(){
@@ -607,7 +631,7 @@ public class StructureBuildMenuController : MonoBehaviour
             (GameObject)GameManager.Instance.getResource("general:ui:upgradeButton"), content.transform
                         ).GetComponent<ButtonLayout>();
 
-        //selectionButton.icon.sprite = GameManager.Instance.getSprite(FixedVariables.decorIcons[decorId]);
+        selectionButton.icon.sprite = GameManager.Instance.getSprite(FixedVariables.structureIcons[decorId]);
         selectionButton.text.text = FixedVariables.decorNames[decorId];
         selectionButton.button.onClick.AddListener(delegate {openDecorProceedure(decorId);});
     }

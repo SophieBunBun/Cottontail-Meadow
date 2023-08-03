@@ -29,10 +29,44 @@ public class Interact : MonoBehaviour
                     case "tree" :
                         return hit.transform.GetComponent<TreeRenderer>().tree;
 
+                    default :
+                        return hit.transform.GetComponent<BasicRenderer>().farmStructure;
+
                 }
             }
         }
         return null;
+    }
+
+    public static void deepUpdateStructure(FarmBase.StructureInstance structure){
+
+        switch (structure.structureId){
+
+            case "flowerbed" :
+                Farm.Instance.structRenderers[structure].GetComponent<FlowerBedRenderer>().deepUpdateStructure();
+                break;
+
+            case "beehouse" :
+                Farm.Instance.structRenderers[structure].GetComponent<BeehouseRenderer>().deepUpdateStructure();
+                break;
+
+            case "farmland" :
+                Farm.Instance.structRenderers[structure].GetComponent<FarmlandRenderer>().deepUpdateStructure();
+                break;
+
+            case "furnace" :
+                Farm.Instance.structRenderers[structure].GetComponent<FurnaceRenderer>().deepUpdateStructure();
+                break;
+
+            case "tree" :
+                Farm.Instance.structRenderers[structure].GetComponent<TreeRenderer>().deepUpdateStructure();
+                break;
+
+            default :
+                Farm.Instance.structRenderers[structure].GetComponent<BasicRenderer>().deepUpdateStructure();
+                break;
+
+        }
     }
     
     public static void interact(RaycastHit hit){

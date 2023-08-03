@@ -32,6 +32,11 @@ public class UIController : MonoBehaviour
         buildMenu.openForBuild();
     }
 
+    public void OpenMoveMenu(){
+
+        buildMenu.openForMove();
+    }
+
     public void OpenDestroyMenu(){
 
         buildMenu.openForDestroy();

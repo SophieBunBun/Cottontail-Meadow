@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6896091821080608099}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.6, y: 4, z: -0.5}
+  m_LocalPosition: {x: -0.6, y: 3.5, z: -0.5}
   m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactableId: furnace
+  interactable: 1
 --- !u!65 &5841574203914127900
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -193,7 +194,7 @@ PrefabInstance:
     - target: {fileID: 8557323890028484745, guid: 58cbe382f86d3fcdaa2babdf9e69ff0b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.72
+      value: 1.22
       objectReference: {fileID: 0}
     - target: {fileID: 8557323890028484745, guid: 58cbe382f86d3fcdaa2babdf9e69ff0b,
         type: 3}

@@ -98,6 +98,11 @@ public class ChangeToolButton : MonoBehaviour
                 button.button.onClick.AddListener(delegate {UIController.Instance.OpenBuildMenu();});
                 break;
 
+            case ("move"):
+
+                button.button.onClick.AddListener(delegate {UIController.Instance.OpenMoveMenu();});
+                break;
+
             case ("destroy"):
 
                 button.button.onClick.AddListener(delegate {UIController.Instance.OpenDestroyMenu();});

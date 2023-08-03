@@ -36,7 +36,7 @@ public class TreeRenderer : MonoBehaviour
     public float getScale(){
 
         float scale = (float)tree.structurePropreties["age"] /
-                          FarmBase.growthTimes[(string)tree.structurePropreties["resource"] + (int)tree.structurePropreties["stage"]];
+                          FixedVariables.proccessTimes[(string)tree.structurePropreties["resource"] + (int)tree.structurePropreties["stage"]];
             scale /= (FixedVariables.resourceFinalStage[(string)tree.structurePropreties["resource"]] + 1f);
             scale += (float)(int)tree.structurePropreties["stage"] / (FixedVariables.resourceFinalStage[(string)tree.structurePropreties["resource"]] + 1f);
         
