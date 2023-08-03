@@ -45,12 +45,9 @@ public class TreeRenderer : MonoBehaviour
 
     public void updateStructure(){
 
-        if ((int)(float)tree.structurePropreties["age"] != 0)
-        {
-            float scale = getScale();
-            treeGraphic.transform.localScale = getScales(scale);
-            treeGraphic.transform.localPosition = getPositions(scale);
-        }
+        float scale = getScale();
+        treeGraphic.transform.localScale = getScales(scale);
+        treeGraphic.transform.localPosition = getPositions(scale);
     }
     
     public void destroyStructure(){
@@ -64,7 +61,7 @@ public class TreeRenderer : MonoBehaviour
         collectIcon.transform.position = transform.position;
         collectIcon.transform.rotation = Quaternion.Euler(-45f, 135f, 0f);
         collectIcon.GetComponent<ItemPickupAnim>().spriteRenderer.sprite =
-            GameManager.Instance.getSprite("sprites:itemIcon:wood");
+            GameManager.Instance.getSprite("sprites:resourceIcon:wood");
     }
 
     private static Vector3 getScales(float scale){

@@ -15,6 +15,7 @@ public class Farm : MonoBehaviour
     public int[] farmSize;
 
     public static Farm Instance;
+    public bool anouncing = true;
 
     public FarmBase.FarmLayout farmLayout;
     public Dictionary<FarmBase.TileInstance, TileRenderer> tileRenderers = new Dictionary<FarmBase.TileInstance, TileRenderer>();
@@ -145,6 +146,60 @@ public class Farm : MonoBehaviour
         return structRenderers[structure];
     }
 
+    public void toggleAllAnnouncements(bool value){
+        
+        anouncing = value;
+
+        if (value){
+            foreach (FarmBase.StructureInstance structure in structRenderers.Keys){
+
+                switch (structure.structureId){
+
+                    case "flowerbed" :
+                        Farm.Instance.structRenderers[structure].GetComponent<FlowerBedRenderer>().attemptAnouncement();
+                        break;
+
+                    case "beehouse" :
+                        Farm.Instance.structRenderers[structure].GetComponent<BeehouseRenderer>().attemptAnouncement();
+                        break;
+
+                    case "farmland" :
+                        Farm.Instance.structRenderers[structure].GetComponent<FarmlandRenderer>().attemptAnouncement();
+                        break;
+
+                    case "furnace" :
+                        Farm.Instance.structRenderers[structure].GetComponent<FurnaceRenderer>().attemptAnouncement();
+                        break;
+
+                }
+            }
+        }
+        else{
+            foreach (FarmBase.StructureInstance structure in structRenderers.Keys){
+
+                switch (structure.structureId){
+
+                    case "flowerbed" :
+                        Farm.Instance.structRenderers[structure].GetComponent<FlowerBedRenderer>().destroyAnouncement();
+                        break;
+
+                    case "beehouse" :
+                        Farm.Instance.structRenderers[structure].GetComponent<BeehouseRenderer>().destroyAnouncement();
+                        break;
+
+                    case "farmland" :
+                        Farm.Instance.structRenderers[structure].GetComponent<FarmlandRenderer>().destroyAnouncement();
+                        break;
+
+                    case "furnace" :
+                        Farm.Instance.structRenderers[structure].GetComponent<FurnaceRenderer>().destroyAnouncement();
+                        break;
+
+                }
+            }
+        }
+    }
+
     public void updateStructures(){
 
         foreach (FarmBase.StructureInstance structure in structRenderers.Keys){
@@ -163,7 +218,7 @@ public class Farm : MonoBehaviour
                             if ((float)structure.structurePropreties["maintenenceTime"] <= 0f){
 
                                 structure.structurePropreties["currentInteraction"] = "finishUpgrade";
-                                structRenderers[structure].GetComponent<FurnaceRenderer>().anounceInteraction();
+                                structRenderers[structure].GetComponent<FurnaceRenderer>().attemptAnouncement();
                             }
                         }
                         else if (structure.structurePropreties["resource"] != null){
@@ -187,9 +242,6 @@ public class Farm : MonoBehaviour
 
                 case "tree" :
 
-                    structure.structurePropreties["age"] = (float)structure.structurePropreties["age"] + Time.deltaTime * timeScale;
-                    structRenderers[structure].GetComponent<TreeRenderer>().updateStructure();
-
                     if ((float)structure.structurePropreties["age"] 
                     > 
                     FarmBase.growthTimes[(string)structure.structurePropreties["resource"] 
@@ -203,6 +255,10 @@ public class Farm : MonoBehaviour
                             structRenderers[structure].GetComponent<TreeRenderer>().playLeafParticles();
                             structRenderers[structure].GetComponent<TreeRenderer>().deepUpdateStructure();
                         }
+                    }
+                    else{
+                        structure.structurePropreties["age"] = (float)structure.structurePropreties["age"] + Time.deltaTime * timeScale;
+                        structRenderers[structure].GetComponent<TreeRenderer>().updateStructure();
                     }
 
                     break;
@@ -219,7 +275,7 @@ public class Farm : MonoBehaviour
 
                             if (FixedVariables.resourceFinalStage["beehouse"] == (int)structure.structurePropreties["stage"]){
                                 structure.structurePropreties["currentInteraction"] = "harvestResource";
-                                structRenderers[structure].GetComponent<BeehouseRenderer>().anounceInteraction();
+                                structRenderers[structure].GetComponent<BeehouseRenderer>().attemptAnouncement();
                             }
                             else {
 
@@ -244,7 +300,7 @@ public class Farm : MonoBehaviour
                             if ((float)structure.structurePropreties["maintenenceTime"] <= 0f){
 
                                 structure.structurePropreties["currentInteraction"] = "finishUpgrade";
-                                structRenderers[structure].GetComponent<FlowerBedRenderer>().anounceInteraction();
+                                structRenderers[structure].GetComponent<FlowerBedRenderer>().attemptAnouncement();
                             }
                         }
                         else if (structure.structurePropreties["resource"] != null){
@@ -260,7 +316,7 @@ public class Farm : MonoBehaviour
                                 if (FixedVariables.resourceFinalStage[(string)structure.structurePropreties["resource"]]
                                 == (int)structure.structurePropreties["stage"]){
                                     structure.structurePropreties["currentInteraction"] = "harvestPlant";
-                                    structRenderers[structure].GetComponent<FlowerBedRenderer>().anounceInteraction();
+                                    structRenderers[structure].GetComponent<FlowerBedRenderer>().attemptAnouncement();
                                 }
                                 else {
 
@@ -285,7 +341,7 @@ public class Farm : MonoBehaviour
                             if ((float)structure.structurePropreties["maintenenceTime"] <= 0f){
 
                                 structure.structurePropreties["currentInteraction"] = "finishUpgrade";
-                                structRenderers[structure].GetComponent<FarmlandRenderer>().anounceInteraction();
+                                structRenderers[structure].GetComponent<FarmlandRenderer>().attemptAnouncement();
                             }
                         }
                         else if (structure.structurePropreties["resource"] != null){
@@ -301,7 +357,7 @@ public class Farm : MonoBehaviour
                                 if (FixedVariables.resourceFinalStage[(string)structure.structurePropreties["resource"]]
                                 == (int)structure.structurePropreties["stage"]){
                                     structure.structurePropreties["currentInteraction"] = "harvestPlant";
-                                    structRenderers[structure].GetComponent<FarmlandRenderer>().anounceInteraction();
+                                    structRenderers[structure].GetComponent<FarmlandRenderer>().attemptAnouncement();
                                 }
                                 else {
 

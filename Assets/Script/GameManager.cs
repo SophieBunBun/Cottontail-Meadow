@@ -55,6 +55,8 @@ public class GameManager : MonoBehaviour
         itemInventory.addItem(new Item("copperOre", 500));
         itemInventory.addItem(new Item("ironOre", 6));
         itemInventory.addItem(new Item("coal", 5));
+        itemInventory.addItem(new Item("oakSappling", 99));
+        itemInventory.addItem(new Item("pineSappling", 99));
         Instance = this;
         loadResources("farmAssets");
     }
@@ -80,6 +82,14 @@ public class GameManager : MonoBehaviour
                 if(Input.GetAxis("Mouse ScrollWheel") != 0){ cameraController.updateZoom(); }
                 if(Input.GetButton("Horizontal") || Input.GetButton("Vertical")){ playerMovement.moveCharacter(); }
                 else { playerMovement.stopCharacter(); }
+                
+                //Debugging
+                if(Input.GetKeyDown(KeyCode.O)) Farm.Instance.timeScale += 50;
+                if(Input.GetKeyDown(KeyCode.I)) {
+                    Farm.Instance.timeScale -= 50;
+                    Farm.Instance.timeScale = Mathf.Max(Farm.Instance.timeScale, 1);
+                }
+                if(Input.GetKeyDown(KeyCode.P)) Farm.Instance.toggleAllAnnouncements(!Farm.Instance.anouncing);
 
             break;
 
@@ -182,7 +192,7 @@ public class GameManager : MonoBehaviour
                 new string[] {"Textures/Sprites/ResourceIcons/copperBarResourceIcon", "sprites:resourceIcon:copper"},
                 new string[] {"Textures/Sprites/ResourceIcons/ironBarResourceIcon", "sprites:resourceIcon:iron"},
                 new string[] {"Textures/Sprites/ResourceIcons/brickResourceIcon", "sprites:resourceIcon:brick"},
-                new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:wood"},
+                new string[] {"Textures/Sprites/ResourceIcons/woodResourceIcon", "sprites:resourceIcon:wood"},
 
                 new string[] {"Textures/Sprites/StructureIcons/farmland", "sprites:structureIcon:farmland"},
                 new string[] {"Textures/Sprites/StructureIcons/flowerbed", "sprites:structureIcon:flowerbed"},
@@ -191,6 +201,7 @@ public class GameManager : MonoBehaviour
                 new string[] {"Textures/Sprites/StructureIcons/tile", "sprites:structureIcon:tile"},
                 new string[] {"Textures/Sprites/StructureIcons/tree", "sprites:structureIcon:tree"},
 
+                new string[] {"Textures/Sprites/DecorIcons/pineTreeIcon", "sprites:decorIcon:pineTree"},
                 new string[] {"Textures/Sprites/DecorIcons/oakTreeIcon", "sprites:decorIcon:oakTree"},
                 new string[] {"Textures/Sprites/DecorIcons/brickPathIcon", "sprites:decorIcon:brickPath"},
                 new string[] {"Textures/Sprites/DecorIcons/dirtPathIcon", "sprites:decorIcon:dirtPath"},
@@ -200,11 +211,11 @@ public class GameManager : MonoBehaviour
 
                 new string[] {"Textures/Sprites/ItemIcons/moneyItem", "sprites:itemIcon:money"},
                 new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:carrot"},
-                new string[] {"Textures/Sprites/ItemIcons/hydraHoneyItem", "sprites:itemIcon:potato"},
-                new string[] {"Textures/Sprites/ItemIcons/orchidHoneyItem", "sprites:itemIcon:tomato"},
+                new string[] {"Textures/Sprites/ItemIcons/potatoItem", "sprites:itemIcon:potato"},
+                new string[] {"Textures/Sprites/ItemIcons/tomatoItem", "sprites:itemIcon:tomato"},
                 new string[] {"Textures/Sprites/ItemIcons/wildHoneyItem", "sprites:itemIcon:honey"},
-                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:hydrahoney"},
-                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:orchidhoney"},
+                new string[] {"Textures/Sprites/ItemIcons/hydraHoneyItem", "sprites:itemIcon:hydrahoney"},
+                new string[] {"Textures/Sprites/ItemIcons/orchidHoneyItem", "sprites:itemIcon:orchidhoney"},
                 new string[] {"Textures/Sprites/ItemIcons/pinkHydraItem", "sprites:itemIcon:pinkhydra"},
                 new string[] {"Textures/Sprites/ItemIcons/blueHydraItem", "sprites:itemIcon:bluehydra"},
                 new string[] {"Textures/Sprites/ItemIcons/pinkOrchidItem", "sprites:itemIcon:pinkorchid"},
@@ -218,9 +229,9 @@ public class GameManager : MonoBehaviour
                 new string[] {"Textures/Sprites/ItemIcons/ironBarItem", "sprites:itemIcon:iron"},
                 new string[] {"Textures/Sprites/ItemIcons/clayItem", "sprites:itemIcon:clay"},
                 new string[] {"Textures/Sprites/ItemIcons/brickItem", "sprites:itemIcon:brick"},
-                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:wood"},
-                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:oakSappling"},
-                new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:pineSappling"},
+                new string[] {"Textures/Sprites/ItemIcons/woodItem", "sprites:itemIcon:wood"},
+                new string[] {"Textures/Sprites/ItemIcons/acornItem", "sprites:itemIcon:oakSappling"},
+                new string[] {"Textures/Sprites/ItemIcons/pineconeItem", "sprites:itemIcon:pineSappling"},
                 new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:cherrySappling"},
 
                 new string[] {"Textures/Sprites/InteractionIcons/defaultInteraction", "sprites:interactionIcon:default"},

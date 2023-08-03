@@ -15,29 +15,23 @@ public class BeehouseRenderer : MonoBehaviour
                                     (farmStructure.anchorLocation[1] + FarmBase.structureSize[farmStructure.structureId][1] / 2f) * 2f);
         transform.eulerAngles = new Vector3(0f, 180f, 0f);
 
-        if (interactionAnouncement != null){
-
-            foreach (Transform child in interactionAnouncement.transform){
-                foreach (Transform leafChild in child){
-                    Destroy(leafChild.gameObject);
-                }
-                Destroy(child.gameObject);
-            }
-            Destroy(interactionAnouncement);
-        }
+        destroyAnouncement();
 
         beehouseTexture.GetComponent<MeshRenderer>().material =
             (Material)GameManager.Instance.getResource(string.Format("structures:beehouse:beehouse{0}", farmStructure.structurePropreties["stage"].ToString()));
 
         //Initiating interactAnouncement
-        if (farmStructure.structurePropreties["currentInteraction"] != null){
+        attemptAnouncement();
+    }
+    
+    public void attemptAnouncement(){
+        if (farmStructure.structurePropreties["currentInteraction"] != null && Farm.Instance.anouncing){
 
             anounceInteraction();
         }
     }
 
-    public void destroyStructure(){
-        Destroy(beehouseTexture);
+    public void destroyAnouncement(){
         if (interactionAnouncement != null){
 
             foreach (Transform child in interactionAnouncement.transform){
@@ -48,6 +42,11 @@ public class BeehouseRenderer : MonoBehaviour
             }
             Destroy(interactionAnouncement);
         }
+    }
+
+    public void destroyStructure(){
+        Destroy(beehouseTexture);
+        destroyAnouncement();
         Destroy(this.gameObject);
     }
 

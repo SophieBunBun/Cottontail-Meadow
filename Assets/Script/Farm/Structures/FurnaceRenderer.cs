@@ -24,16 +24,7 @@ public class FurnaceRenderer : MonoBehaviour
         //Destroying previous farm
         Destroy(maintnenceSign); //Add smoke poof for sign disapearing
 
-        if (interactionAnouncement != null){
-
-            foreach (Transform child in interactionAnouncement.transform){
-                foreach (Transform leafChild in child){
-                    Destroy(leafChild.gameObject);
-                }
-                Destroy(child.gameObject);
-            }
-            Destroy(interactionAnouncement);
-        }
+        destroyAnouncement();
 
         //Initiating farmland
         if (farmStructure.structurePropreties["currentlyUpgrading"] != null && farmStructure.structurePropreties["currentlyUpgrading"].ToString().Contains("tier"))
@@ -53,10 +44,7 @@ public class FurnaceRenderer : MonoBehaviour
         }
 
         //Initiating interactAnouncement
-        if (farmStructure.structurePropreties["currentInteraction"] != null){
-
-            anounceInteraction();
-        }
+        attemptAnouncement();
 
         //Initiating construction sign
         if (farmStructure.structurePropreties["currentlyUpgrading"] != null)
@@ -66,10 +54,14 @@ public class FurnaceRenderer : MonoBehaviour
         }
     }
 
-    public void destroyStructure(){
-        Destroy(maintnenceSign);
-        Destroy(statisticsSign);
-        Destroy(furnaceTexture);
+    public void attemptAnouncement(){
+        if (farmStructure.structurePropreties["currentInteraction"] != null && Farm.Instance.anouncing){
+
+            anounceInteraction();
+        }
+    }
+
+    public void destroyAnouncement(){
         if (interactionAnouncement != null){
 
             foreach (Transform child in interactionAnouncement.transform){
@@ -80,6 +72,13 @@ public class FurnaceRenderer : MonoBehaviour
             }
             Destroy(interactionAnouncement);
         }
+    }
+
+    public void destroyStructure(){
+        Destroy(maintnenceSign);
+        Destroy(statisticsSign);
+        Destroy(furnaceTexture);
+        destroyAnouncement();
         Destroy(this.gameObject);
     }
 

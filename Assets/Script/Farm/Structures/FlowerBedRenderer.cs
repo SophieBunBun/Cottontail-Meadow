@@ -50,16 +50,7 @@ public class FlowerBedRenderer : MonoBehaviour
             fence = Instantiate((GameObject)GameManager.Instance.getResource("structures:flowerbed:fence"), transform);
         }
 
-        if (interactionAnouncement != null){
-
-            foreach (Transform child in interactionAnouncement.transform){
-                foreach (Transform leafChild in child){
-                    Destroy(leafChild.gameObject);
-                }
-                Destroy(child.gameObject);
-            }
-            Destroy(interactionAnouncement);
-        }
+        destroyAnouncement();
 
         //Initiating farmland
         if ((string)farmStructure.structurePropreties["currentlyUpgrading"] == "tier0")
@@ -72,10 +63,7 @@ public class FlowerBedRenderer : MonoBehaviour
         }
 
         //Initiating interactAnouncement
-        if (farmStructure.structurePropreties["currentInteraction"] != null){
-
-            anounceInteraction();
-        }
+        attemptAnouncement();
 
         //Initiating construction sign
         if (farmStructure.structurePropreties["currentlyUpgrading"] != null)
@@ -95,6 +83,13 @@ public class FlowerBedRenderer : MonoBehaviour
             fullCropNodes = new List<GameObject>();
 
             createCropLayout();
+        }
+    }
+
+    public void attemptAnouncement(){
+        if (farmStructure.structurePropreties["currentInteraction"] != null && Farm.Instance.anouncing){
+
+            anounceInteraction();
         }
     }
 
@@ -161,11 +156,7 @@ public class FlowerBedRenderer : MonoBehaviour
         }
     }
 
-    public void destroyStructure(){
-        Destroy(maintnenceSign);
-        Destroy(statisticsSign);
-        Destroy(flowerBed);
-        Destroy(fence);
+    public void destroyAnouncement(){
         if (interactionAnouncement != null){
 
             foreach (Transform child in interactionAnouncement.transform){
@@ -176,6 +167,14 @@ public class FlowerBedRenderer : MonoBehaviour
             }
             Destroy(interactionAnouncement);
         }
+    }
+
+    public void destroyStructure(){
+        Destroy(maintnenceSign);
+        Destroy(statisticsSign);
+        Destroy(flowerBed);
+        Destroy(fence);
+        destroyAnouncement();
         if (nodes != null){
             foreach (Transform child in nodes.transform){
                 foreach (Transform leafChild in child){

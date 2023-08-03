@@ -68,8 +68,8 @@ public class FixedVariables : MonoBehaviour
         {"brick", "Brick"},
 
         {"wood", "Wood"},
-        {"oakSappling", "Oak sappling"},
-        {"pineSappling", "Pine sappling"},
+        {"oakSappling", "Acorn"},
+        {"pineSappling", "Pinecone"},
         {"cherrySappling", "Cherry sappling"},
     };
 
@@ -205,8 +205,8 @@ public class FixedVariables : MonoBehaviour
         {"tile:path:water", new Item[] {new Item("money", 100)}},
         {"tile:path:gravel", new Item[] {new Item("money", 50)}},
 
-        {"tree:oak", new Item[] {new Item("money", 250)}},
-        {"tree:pine", new Item[] {new Item("money", 250)}},
+        {"tree:oak", new Item[] {new Item("oakSappling", 1)}},
+        {"tree:pine", new Item[] {new Item("pineSappling", 1)}},
         {"tree:cherry", new Item[] {new Item("money", 250)}},
 
         {"fruittree:apple", new Item[] {new Item("money", 2000)}},
@@ -239,7 +239,7 @@ public class FixedVariables : MonoBehaviour
         {"tile:path:water", "sprites:decorIcon:water"},
 
         {"tree:oak", "sprites:decorIcon:oakTree"},
-        {"tree:pine", "sprites:decorIcon:oakTree"},
+        {"tree:pine", "sprites:decorIcon:pineTree"},
     };
 
     public static Dictionary<string, string> structureNames = new Dictionary<string, string>{
