@@ -1065,6 +1065,7 @@ MonoBehaviour:
   - tree:oak
   timeScale: 200
   farmSize: 1400000014000000
+  anouncing: 1
 --- !u!1001 &1914222366
 PrefabInstance:
   m_ObjectHideFlags: 0
