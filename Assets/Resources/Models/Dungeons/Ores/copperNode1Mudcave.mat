@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ironNodeMudcave
+  m_Name: copperNode1Mudcave
   m_Shader: {fileID: -6465566751694194690, guid: cfcf6856644d6f6169a228e05e69aaed,
     type: 3}
   m_Parent: {fileID: 0}
@@ -46,7 +46,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
-        m_Texture: {fileID: 2800000, guid: fc9bd7311cd4b33139a4de51dba5ec9a, type: 3}
+        m_Texture: {fileID: 2800000, guid: a74dffb88fe5692f898dedf0028d49ff, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:

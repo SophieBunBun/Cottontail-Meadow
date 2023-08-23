@@ -10,6 +10,31 @@ public class FixedVariables : MonoBehaviour
     Low
 }
 
+    //Resource nodes
+    public static Dictionary<string, int> nodeVariantCount = new Dictionary<string, int>{
+
+        {"mudcave:rock", 1},
+        {"mudcave:coal", 1},
+        {"mudcave:copper", 1},
+        {"mudcave:iron", 1},
+    };
+
+    public static Dictionary<string, Dictionary<string, float>> dungeonResources = new Dictionary<string, Dictionary<string, float>>{
+
+        {"mudcave", new Dictionary<string, float>{
+            {"mudcave:coal", 0.4f},
+            {"mudcave:copper", 0.4f},
+            {"mudcave:iron", 0.2f},
+        }},
+    };
+
+    public static Dictionary<string, Dictionary<string, float>> dungeonFillers = new Dictionary<string, Dictionary<string, float>>{
+
+        {"mudcave", new Dictionary<string, float>{
+            {"mudcave:rock", 1f},
+        }},
+    };
+
     //Tool lists
     public static string[] tools = new string[] {"inspect", "wateringcan", "axe", "pickaxe"};
     public static Dictionary<string, string[]> toolOptions = new Dictionary<string, string[]>{

@@ -58,7 +58,9 @@ public class GameManager : MonoBehaviour
         itemInventory.addItem(new Item("oakSappling", 99));
         itemInventory.addItem(new Item("pineSappling", 99));
         Instance = this;
-        loadResources("farmAssets");
+        loadGeneralResources();
+        //loadResources("farmAssets");
+        loadResources("dungeonAssets");
     }
 
     //General managers & controllers
@@ -71,64 +73,69 @@ public class GameManager : MonoBehaviour
 
     public string state = "farmRoaming";
     public string tool = "inspect";
-    void Update(){
+    void Update()
+    {
 
-        switch (state){
+        switch (state)
+        {
 
             case "farmRoaming":
 
-                if(!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() &&
-                Input.GetButtonDown("Tap")){ Interact.interact(cameraController.raycast()); }
-                if(Input.GetAxis("Mouse ScrollWheel") != 0){ cameraController.updateZoom(); }
-                if(Input.GetButton("Horizontal") || Input.GetButton("Vertical")){ playerMovement.moveCharacter(); }
+                if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() &&
+                Input.GetButtonDown("Tap")) { Interact.interact(cameraController.raycast()); }
+                if (Input.GetAxis("Mouse ScrollWheel") != 0) { cameraController.updateZoom(); }
+                if (Input.GetButton("Horizontal") || Input.GetButton("Vertical")) { playerMovement.moveCharacter(); }
                 else { playerMovement.stopCharacter(); }
-                
+
                 //Debugging
-                if(Input.GetKeyDown(KeyCode.O)) Farm.Instance.timeScale += 50;
-                if(Input.GetKeyDown(KeyCode.I)) {
+                if (Input.GetKeyDown(KeyCode.O)) Farm.Instance.timeScale += 50;
+                if (Input.GetKeyDown(KeyCode.I))
+                {
                     Farm.Instance.timeScale -= 50;
                     Farm.Instance.timeScale = Mathf.Max(Farm.Instance.timeScale, 1);
                 }
-                if(Input.GetKeyDown(KeyCode.P)) Farm.Instance.toggleAllAnnouncements(!Farm.Instance.anouncing);
+                if (Input.GetKeyDown(KeyCode.P)) Farm.Instance.toggleAllAnnouncements(!Farm.Instance.anouncing);
 
-            break;
+                break;
 
             case "farmPrompt":
 
                 playerMovement.stopCharacter();
-                if(Input.GetAxis("Mouse ScrollWheel") != 0){ cameraController.updateZoom(); }
+                if (Input.GetAxis("Mouse ScrollWheel") != 0) { cameraController.updateZoom(); }
 
-            break;
+                break;
 
             case "moveMode":
 
                 playerMovement.stopCharacter();
-                if(!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()
-                && Input.GetButton("Tap")){ uiController.buildMenu.moveBuilding(Interact.getStructure(cameraController.raycast())); }
+                if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()
+                && Input.GetButton("Tap")) { uiController.buildMenu.moveBuilding(Interact.getStructure(cameraController.raycast())); }
 
-            break;
+                break;
 
             case "preciseBuildPlan":
 
                 playerMovement.stopCharacter();
-                if(!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()
-                && Input.GetButton("Tap")){ uiController.buildMenu.updateBuildPlanPos(cameraController.raycast()); }
+                if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()
+                && Input.GetButton("Tap")) { uiController.buildMenu.updateBuildPlanPos(cameraController.raycast()); }
 
-            break;
+                break;
 
             case "freeBuildPlan":
 
                 playerMovement.stopCharacter();
-                if(!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()
-                && Input.GetButton("Tap")){ uiController.buildMenu.updateBuildPlanFree(cameraController.raycast()); }
+                if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()
+                && Input.GetButton("Tap")) { uiController.buildMenu.updateBuildPlanFree(cameraController.raycast()); }
 
-            break;
+                break;
         }
     }
 
-    public void changeState(string state){
+    public void changeState(string state)
+    {
 
-        switch (state){
+        switch (state)
+        {
 
             case "farmRoaming":
 
@@ -164,14 +171,16 @@ public class GameManager : MonoBehaviour
     public string loadedKey = null;
     private static Dictionary<string, string[][]> loadKey = new Dictionary<string, string[][]>
     {
-        {"farmAssets", new string[][] 
+        {"generalAssets", new string[][]
             {
+                //Tools
                 new string[] {"Prefabs/General/point", "general:tools:empty"},
                 new string[] {"Prefabs/General/cameraLockedSprite", "general:tools:cameraSprite"},
                 new string[] {"Prefabs/General/UpDownBobPointer", "general:tools:upDownBobPointer"},
                 new string[] {"Prefabs/General/ColoredPlane", "general:tools:plane"},
                 new string[] {"Prefabs/General/ItemPickupIcon", "general:tools:itemPickup"},
 
+                //UI Elements
                 new string[] {"Prefabs/General/UI/Button", "general:ui:basicbutton"},
                 new string[] {"Prefabs/General/UI/upgradeButton", "general:ui:upgradeButton"},
                 new string[] {"Prefabs/General/UI/itemDisplay", "general:ui:itemDisplay"},
@@ -179,6 +188,7 @@ public class GameManager : MonoBehaviour
                 new string[] {"Prefabs/General/UI/resourceSelectionButton", "general:ui:resourceSelectionButton"},
                 new string[] {"Prefabs/General/UI/resourceSelectionButtonComplex", "general:ui:resourceSelectionButtonComplex"},
 
+                //Harvest icons
                 new string[] {"Textures/Sprites/ResourceIcons/emptyIcon", "sprites:resourceIcon:empty"},
                 new string[] {"Textures/Sprites/ResourceIcons/carrotCropIcon", "sprites:resourceIcon:carrot"},
                 new string[] {"Textures/Sprites/ResourceIcons/potatoCropIcon", "sprites:resourceIcon:potato"},
@@ -194,21 +204,7 @@ public class GameManager : MonoBehaviour
                 new string[] {"Textures/Sprites/ResourceIcons/brickResourceIcon", "sprites:resourceIcon:brick"},
                 new string[] {"Textures/Sprites/ResourceIcons/woodResourceIcon", "sprites:resourceIcon:wood"},
 
-                new string[] {"Textures/Sprites/StructureIcons/farmland", "sprites:structureIcon:farmland"},
-                new string[] {"Textures/Sprites/StructureIcons/flowerbed", "sprites:structureIcon:flowerbed"},
-                new string[] {"Textures/Sprites/StructureIcons/furnace", "sprites:structureIcon:furnace"},
-                new string[] {"Textures/Sprites/StructureIcons/beehouse", "sprites:structureIcon:beehouse"},
-                new string[] {"Textures/Sprites/StructureIcons/tile", "sprites:structureIcon:tile"},
-                new string[] {"Textures/Sprites/StructureIcons/tree", "sprites:structureIcon:tree"},
-
-                new string[] {"Textures/Sprites/DecorIcons/pineTreeIcon", "sprites:decorIcon:pineTree"},
-                new string[] {"Textures/Sprites/DecorIcons/oakTreeIcon", "sprites:decorIcon:oakTree"},
-                new string[] {"Textures/Sprites/DecorIcons/brickPathIcon", "sprites:decorIcon:brickPath"},
-                new string[] {"Textures/Sprites/DecorIcons/dirtPathIcon", "sprites:decorIcon:dirtPath"},
-                new string[] {"Textures/Sprites/DecorIcons/grassIcon", "sprites:decorIcon:grass"},
-                new string[] {"Textures/Sprites/DecorIcons/gravelPathIcon", "sprites:decorIcon:gravelPath"},
-                new string[] {"Textures/Sprites/DecorIcons/waterPathIcon", "sprites:decorIcon:water"},
-
+                //Items
                 new string[] {"Textures/Sprites/ItemIcons/moneyItem", "sprites:itemIcon:money"},
                 new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:carrot"},
                 new string[] {"Textures/Sprites/ItemIcons/potatoItem", "sprites:itemIcon:potato"},
@@ -234,13 +230,7 @@ public class GameManager : MonoBehaviour
                 new string[] {"Textures/Sprites/ItemIcons/pineconeItem", "sprites:itemIcon:pineSappling"},
                 new string[] {"Textures/Sprites/ItemIcons/carrotItem", "sprites:itemIcon:cherrySappling"},
 
-                new string[] {"Textures/Sprites/InteractionIcons/defaultInteraction", "sprites:interactionIcon:default"},
-                new string[] {"Textures/Sprites/InteractionIcons/maintnenceComplete", "sprites:interactionIcon:maintnenceComplete"},
-                new string[] {"Textures/Sprites/InteractionIcons/farmlandCropReady", "sprites:interactionIcon:farmlandCropReady"},
-                new string[] {"Textures/Sprites/InteractionIcons/flowerBedFlowerReady", "sprites:interactionIcon:flowerbedFlowerReady"},
-                new string[] {"Textures/Sprites/InteractionIcons/furnaceResourceReady", "sprites:interactionIcon:furnaceResourceReady"},
-                new string[] {"Textures/Sprites/InteractionIcons/beehouseHoneyReady", "sprites:interactionIcon:beehouseHoneyReady"},
-
+                //Tool icons
                 new string[] {"Textures/Sprites/ButtonIcons/inspect", "sprites:buttonIcons:inspect"},
                 new string[] {"Textures/Sprites/ButtonIcons/wateringcan", "sprites:buttonIcons:wateringcan"},
                 new string[] {"Textures/Sprites/ButtonIcons/axe", "sprites:buttonIcons:axe"},
@@ -248,6 +238,31 @@ public class GameManager : MonoBehaviour
                 new string[] {"Textures/Sprites/ButtonIcons/buildmode", "sprites:buttonIcons:build"},
                 new string[] {"Textures/Sprites/ButtonIcons/move", "sprites:buttonIcons:move"},
                 new string[] {"Textures/Sprites/ButtonIcons/destroy", "sprites:buttonIcons:destroy"},
+            }
+        },
+        {"farmAssets", new string[][]
+            {
+                new string[] {"Textures/Sprites/StructureIcons/farmland", "sprites:structureIcon:farmland"},
+                new string[] {"Textures/Sprites/StructureIcons/flowerbed", "sprites:structureIcon:flowerbed"},
+                new string[] {"Textures/Sprites/StructureIcons/furnace", "sprites:structureIcon:furnace"},
+                new string[] {"Textures/Sprites/StructureIcons/beehouse", "sprites:structureIcon:beehouse"},
+                new string[] {"Textures/Sprites/StructureIcons/tile", "sprites:structureIcon:tile"},
+                new string[] {"Textures/Sprites/StructureIcons/tree", "sprites:structureIcon:tree"},
+
+                new string[] {"Textures/Sprites/DecorIcons/pineTreeIcon", "sprites:decorIcon:pineTree"},
+                new string[] {"Textures/Sprites/DecorIcons/oakTreeIcon", "sprites:decorIcon:oakTree"},
+                new string[] {"Textures/Sprites/DecorIcons/brickPathIcon", "sprites:decorIcon:brickPath"},
+                new string[] {"Textures/Sprites/DecorIcons/dirtPathIcon", "sprites:decorIcon:dirtPath"},
+                new string[] {"Textures/Sprites/DecorIcons/grassIcon", "sprites:decorIcon:grass"},
+                new string[] {"Textures/Sprites/DecorIcons/gravelPathIcon", "sprites:decorIcon:gravelPath"},
+                new string[] {"Textures/Sprites/DecorIcons/waterPathIcon", "sprites:decorIcon:water"},
+
+                new string[] {"Textures/Sprites/InteractionIcons/defaultInteraction", "sprites:interactionIcon:default"},
+                new string[] {"Textures/Sprites/InteractionIcons/maintnenceComplete", "sprites:interactionIcon:maintnenceComplete"},
+                new string[] {"Textures/Sprites/InteractionIcons/farmlandCropReady", "sprites:interactionIcon:farmlandCropReady"},
+                new string[] {"Textures/Sprites/InteractionIcons/flowerBedFlowerReady", "sprites:interactionIcon:flowerbedFlowerReady"},
+                new string[] {"Textures/Sprites/InteractionIcons/furnaceResourceReady", "sprites:interactionIcon:furnaceResourceReady"},
+                new string[] {"Textures/Sprites/InteractionIcons/beehouseHoneyReady", "sprites:interactionIcon:beehouseHoneyReady"},
 
                 //Upgrade Icons
                 new string[] {"Textures/Sprites/UpgradeIcons/farmlandCrop", "sprites:upgradeIcon:farmlandCrop"},
@@ -377,23 +392,83 @@ public class GameManager : MonoBehaviour
                 new string[] {"Textures/Tiles/GravelPath/Corners/3CornerGravelPathMat", "materials:path:gravelcorner3"},
                 new string[] {"Textures/Tiles/GravelPath/Corners/4CornerGravelPathMat", "materials:path:gravelcorner4"},
             }
-        }
+        },
+        {"dungeonAssets", new string[][]
+            {
+                //ResourceNodes
+                new string[] {"Models/Dungeons/Ores/rockNode1Mudcave", "resourceNodes:mudcave:rock0"},
+                new string[] {"Models/Dungeons/Ores/coalNode1Mudcave", "resourceNodes:mudcave:coal0"},
+                new string[] {"Models/Dungeons/Ores/copperNode1Mudcave", "resourceNodes:mudcave:copper0"},
+                new string[] {"Models/Dungeons/Ores/ironNode1Mudcave", "resourceNodes:mudcave:iron0"},
+            }
+        },
     };
-    private Dictionary<string, Dictionary<string, Dictionary<string, object>>> loadedResources; 
-    public void loadResources(string key){
+    private Dictionary<string, Dictionary<string, Dictionary<string, object>>> loadedGeneralResources;
+    private Dictionary<string, Dictionary<string, Dictionary<string, object>>> loadedResources;
 
-        loadedResources = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
+    public void loadGeneralResources()
+    {
 
-        foreach (string[] entry in loadKey[key]){
+        loadedGeneralResources = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
+
+        foreach (string[] entry in loadKey["generalAssets"])
+        {
 
             var resource = Resources.Load(entry[0]);
             string[] split = entry[1].Split(":");
 
-            if (!loadedResources.ContainsKey(split[0])){
+            if (!loadedGeneralResources.ContainsKey(split[0]))
+            {
+                loadedGeneralResources.Add(split[0], new Dictionary<string, Dictionary<string, object>>());
+            }
+
+            if (!loadedGeneralResources[split[0]].ContainsKey(split[1]))
+            {
+                loadedGeneralResources[split[0]].Add(split[1], new Dictionary<string, object>());
+            }
+
+            loadedGeneralResources[split[0]][split[1]].Add(split[2], resource);
+        }
+    }
+
+    public void loadResources(string key)
+    {
+
+        loadedResources = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
+
+        //Loading general assets
+        foreach (string[] entry in loadKey["generalAssets"])
+        {
+
+            string[] split = entry[1].Split(":");
+
+            if (!loadedResources.ContainsKey(split[0]))
+            {
                 loadedResources.Add(split[0], new Dictionary<string, Dictionary<string, object>>());
             }
 
-            if (!loadedResources[split[0]].ContainsKey(split[1])){
+            if (!loadedResources[split[0]].ContainsKey(split[1]))
+            {
+                loadedResources[split[0]].Add(split[1], new Dictionary<string, object>());
+            }
+
+            loadedResources[split[0]][split[1]].Add(split[2], loadedGeneralResources[split[0]][split[1]][split[2]]);
+        }
+
+        //Loading specific assets
+        foreach (string[] entry in loadKey[key])
+        {
+
+            var resource = Resources.Load(entry[0]);
+            string[] split = entry[1].Split(":");
+
+            if (!loadedResources.ContainsKey(split[0]))
+            {
+                loadedResources.Add(split[0], new Dictionary<string, Dictionary<string, object>>());
+            }
+
+            if (!loadedResources[split[0]].ContainsKey(split[1]))
+            {
                 loadedResources[split[0]].Add(split[1], new Dictionary<string, object>());
             }
 
@@ -402,12 +477,14 @@ public class GameManager : MonoBehaviour
 
         loadedKey = key;
     }
-    public object getResource(string id){
+    public object getResource(string id)
+    {
         string[] split = id.Split(":");
         return loadedResources[split[0]][split[1]][split[2]];
     }
 
-    public Sprite getSprite(string id){
+    public Sprite getSprite(string id)
+    {
         string[] split = id.Split(":");
         return Sprite.Create((Texture2D)loadedResources[split[0]][split[1]][split[2]], new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
     }
